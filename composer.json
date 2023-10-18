@@ -1,0 +1,20 @@
+{
+    "name": "xryf/hongshan_drg-core",
+    "description": "\u0015\u0015\u0015\u0015DRG\u0015\u0015\u0015\u0015",
+    "type": "library",
+    "license": "MulanPSL-2.0",
+    "authors": [
+        {
+            "name": "wangruanqiang",
+            "email": "wangruanqiang@youzhibo.cn"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "hsdrg\\": "src"
+        }
+    },
+    "require": {
+        "php": ">=7.2"
+    }
+}
