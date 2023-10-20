@@ -4,16 +4,11 @@ declare(strict_types=1);
 
 namespace hsdrg\struct;
 
-use hsdrg\interfaces\IAdrgProcessor;
 use hsdrg\interfaces\ICollection;
+use hsdrg\interfaces\IDetectProcessor;
 use hsdrg\interfaces\IDrgProcessor;
-use hsdrg\processor\Base as BaseProcessor;
-use hsdrg\processor\MultiDiagnosis as MDProcessor;
-use hsdrg\processor\MultiProcedure as MPProcessor;
-use hsdrg\processor\SignleDiagnosisAndMultiProcedure as SDAMPProcessor;
-use hsdrg\processor\SignleDiagnosisAndProcedure as SDAPProcessor;
-use hsdrg\processor\SingleDiagnosis as SDProcessor;
-use hsdrg\processor\SingleProcedure as SPProcessor;
+use hsdrg\processor\adrg\SingleDiagnosis as SDProcessor;
+use hsdrg\processor\adrg\SingleProcedure as SPProcessor;
 use hsdrg\Util;
 
 /**
@@ -96,20 +91,20 @@ class AdjacentDiagnosisRelatedGroup extends Base implements IDrgProcessor, IColl
      * 处理器类型映射
      */
     public const PROCESSOR_MAP = [
-        1 => MDProcessor::class,
-        2 => MPProcessor::class,
-        3 => SDAMPProcessor::class,
-        4 => SDAPProcessor::class,
-        5 => SDProcessor::class,
-        6 => SPProcessor::class
+        // 1 => MDProcessor::class,
+        // 2 => MPProcessor::class,
+        // 3 => SDAMPProcessor::class,
+        // 4 => SDAPProcessor::class,
+        // 5 => SDProcessor::class,
+        // 6 => SPProcessor::class
     ];
 
     /**
      * 获取adrg分组处理器
      *
-     * @return AdrgProcessor 返回adrg处理器对象
+     * @return IDetectProcessor 返回adrg处理器对象
      */
-    public function getProcessor(): IAdrgProcessor
+    public function getProcessor(): IDetectProcessor
     {
         if (!\is_null($this->processor)) {
             return $this->processor;
