@@ -16,6 +16,6 @@ class SinglePrincipalDiagnosis extends Base
     /** @inheritDoc */
     public function detect(MedicalRecord $medicalRecord, array $items): bool
     {
-        return true;
+        return \in_array($medicalRecord->principalDiagnosis, $items[0]);
     }
 }

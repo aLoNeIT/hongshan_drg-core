@@ -16,6 +16,13 @@ class SingleDiagnosis extends Base
     /** @inheritDoc */
     public function detect(MedicalRecord $medicalRecord, array $items): bool
     {
-        return true;
+        // 主诊断和其他诊断合并为一个数组
+        $diagnosis = [
+            $medicalRecord->principalDiagnosis,
+            ...$medicalRecord->secondaryDiagnosis
+        ];
+        // 计算交集
+        $intersect = array_intersect($diagnosis, $items[0]);
+        return !empty($intersect);
     }
 }

@@ -16,6 +16,22 @@ class TwiceDiagnosis extends Base
     /** @inheritDoc */
     public function detect(MedicalRecord $medicalRecord, array $items): bool
     {
-        return true;
+        // 主诊断和其他诊断合并为一个数组
+        $diagnosis = [
+            $medicalRecord->principalDiagnosis,
+            ...$medicalRecord->secondaryDiagnosis
+        ];
+        $matchCount = 0;
+        foreach ($items as $item) {
+            // 计算交集
+            $intersect = array_intersect($diagnosis, $item);
+            if (!empty($intersect)) {
+                $matchCount++;
+                // 从诊断集合中删除当前诊断
+                $diagnosis = array_diff($diagnosis, $intersect);
+                continue;
+            }
+        }
+        return $matchCount >= 2;
     }
 }
