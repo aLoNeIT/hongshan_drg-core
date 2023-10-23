@@ -16,12 +16,11 @@ class AnyProcedure extends Base
     /** @inheritDoc */
     public function detect(MedicalRecord $medicalRecord, array $items): bool
     {
-        if (
-            (!\is_null($medicalRecord->majorProcedure) && '' != $medicalRecord->secondaryProcedure)
-            || (!empty($medicalRecord->secondaryProcedure))
-        ) {
-            return true;
-        }
-        return false;
+        // 主手术和其他手术合并为数组
+        $procedures = [
+            ...($medicalRecord->majorProcedure ? [$medicalRecord->majorProcedure] : []),
+            ...$medicalRecord->secondaryProcedure
+        ];
+        return !empty($procedures);
     }
 }

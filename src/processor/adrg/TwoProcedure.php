@@ -11,11 +11,24 @@ use hsdrg\struct\MedicalRecord;
  * 
  * @author 王阮强 <wangruanqiang@hongshanhis.com>
  */
-class TwoProcedure extends Base
+class TwoProcedure extends SinglePrincipalDiagnosisAndMultiProcedure
 {
     /** @inheritDoc */
     public function detect(MedicalRecord $medicalRecord, array $items): bool
     {
-        return true;
+        // 主手术和其他手术合并为数组
+        $procedures = [
+            ...($medicalRecord->majorProcedure ? [$medicalRecord->majorProcedure] : []),
+            ...$medicalRecord->secondaryProcedure
+        ];
+        $match = true;
+        // 手术表1+手术表2匹配
+        foreach ([0, 1] as $idx) {
+            if (!$this->detectProcedure($procedures, $items['procedure'][$idx] ?? [])) {
+                $match = false;
+                break;
+            }
+        }
+        return $match;
     }
 }

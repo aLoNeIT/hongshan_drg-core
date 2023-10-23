@@ -18,7 +18,7 @@ class SingleDiagnosis extends Base
     {
         // 主诊断和其他诊断合并为一个数组
         $diagnosis = [
-            $medicalRecord->principalDiagnosis,
+            ...($medicalRecord->principalDiagnosis ? [$medicalRecord->principalDiagnosis] : []),
             ...$medicalRecord->secondaryDiagnosis
         ];
         // 计算交集

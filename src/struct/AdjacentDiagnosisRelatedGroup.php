@@ -7,8 +7,19 @@ namespace hsdrg\struct;
 use hsdrg\interfaces\ICollection;
 use hsdrg\interfaces\IDetectProcessor;
 use hsdrg\interfaces\IDrgProcessor;
-use hsdrg\processor\adrg\SingleDiagnosis as SDProcessor;
-use hsdrg\processor\adrg\SingleProcedure as SPProcessor;
+use hsdrg\processor\adrg\{
+    AnyProcedure,
+    ExcludeProcedure,
+    NoProcedure,
+    SingleDiagnosis,
+    SingleMajorProcedure,
+    SinglePrincipalDiagnosis,
+    SinglePrincipalDiagnosisAndMultiProcedure,
+    SingleMajorProcedureAndSecondaryProcedure,
+    SinglePrincipalDiagnosisAndTwoProcedure,
+    SinglePrincipalDiagnosisOrMajorProcedure,
+    TwoProcedure
+};
 use hsdrg\Util;
 
 /**
@@ -61,16 +72,16 @@ class AdjacentDiagnosisRelatedGroup extends Base implements IDrgProcessor, IColl
      */
     public $processorType = null;
     /**
-     * adrg规则集合，每个元素都是一个AdjacentDiagnosisRelatedGroupItem对象
+     * adrg规则集合，kv结构，key为adrg编码，value为adrg对象
      *
      * - 参考结构    
      * ```
      * [    
      *     'diagnosis' => [    
-     *         0=>[AdjacentDiagnosisRelatedGroupItem,AdjacentDiagnosisRelatedGroupItem],    
+     *         0=>['code'=>'AdjacentDiagnosisRelatedGroupItem','code'=>'AdjacentDiagnosisRelatedGroupItem'],    
      *     ],    
      *     'procedure' => [    
-     *        1=>[AdjacentDiagnosisRelatedGroupItem,AdjacentDiagnosisRelatedGroupItem],    
+     *        1=>['code'=>'AdjacentDiagnosisRelatedGroupItem','code'=>'AdjacentDiagnosisRelatedGroupItem'],    
      *     ]    
      * ]    
      * ```
@@ -82,6 +93,21 @@ class AdjacentDiagnosisRelatedGroup extends Base implements IDrgProcessor, IColl
         'procedure' => [] // 手术或操作
     ];
     /**
+     * 编码集合，用于快速查找，每个元素都是编码字符串
+     *
+     * - 参考结构
+     * ```
+     * $codes = [
+     *     'diagnosis' => [], //诊断
+     *     'procedure' => [] // 手术或操作
+     * ]
+     * ```
+     * 
+     * @var array|null
+     */
+    private $codes = null;
+
+    /**
      * 处理器
      *
      * @var object|null
@@ -89,14 +115,29 @@ class AdjacentDiagnosisRelatedGroup extends Base implements IDrgProcessor, IColl
     private $processor = null;
     /**
      * 处理器类型映射
+     * 
+     * - 1：单主诊断
+     * - 2：单主手术或操作
+     * - 3：双手术
+     * - 4：单主诊断+多手术组合
+     * - 5：单诊断
+     * - 6：任意手术
+     * - 7：任意手术（排除指定手术）
+     * - 8：无手术
+     * - 9：主要诊断或主要手术操作
+     * - 10：单主诊断和双手术
      */
     public const PROCESSOR_MAP = [
-        // 1 => MDProcessor::class,
-        // 2 => MPProcessor::class,
-        // 3 => SDAMPProcessor::class,
-        // 4 => SDAPProcessor::class,
-        // 5 => SDProcessor::class,
-        // 6 => SPProcessor::class
+        1 => SinglePrincipalDiagnosis::class,
+        2 => SinglePrincipalDiagnosisOrMajorProcedure::class,
+        3 => TwoProcedure::class,
+        4 => SinglePrincipalDiagnosisAndMultiProcedure::class,
+        5 => SingleDiagnosis::class,
+        6 => AnyProcedure::class,
+        7 => ExcludeProcedure::class,
+        8 => NoProcedure::class,
+        9 => SinglePrincipalDiagnosisOrMajorProcedure::class,
+        10 => SinglePrincipalDiagnosisAndTwoProcedure::class,
     ];
 
     /**
@@ -130,7 +171,7 @@ class AdjacentDiagnosisRelatedGroup extends Base implements IDrgProcessor, IColl
             $obj->load($item);
             $typeName = static::ADRG_ITEM_TYPE_MAP[$obj->type] ?? null;
             if (!\is_null($typeName)) {
-                $this->items[$typeName][$obj->index][] = $obj;
+                $this->items[$typeName][$obj->index][$obj->code] = $obj;
             }
         }
         return $this;
@@ -138,8 +179,33 @@ class AdjacentDiagnosisRelatedGroup extends Base implements IDrgProcessor, IColl
     /** @inheritDoc */
     public function process(MedicalRecord $medicalRecord): array
     {
+        // 计算当前conditions是否满足
+        $result = Util::detectFormulaArray($medicalRecord, $this->conditions);
+        if (false === $result) {
+            return Util::jerror(11);
+        }
+        // 创建adrg处理器，进行检测
         $processor = $this->getProcessor();
-        $result = $processor->detect($medicalRecord, $this->items);
+        $result = $processor->detect($medicalRecord, $this->getCodes());
         return $result ? Util::jsuccess($this->code) : Util::jerror();
+    }
+    /**
+     * 获取编码集合
+     *
+     * @return array 返回编码集合
+     */
+    protected function getCodes(): array
+    {
+        if (\is_null($this->codes)) {
+            $codes = [];
+            // 提取所有编码
+            foreach (['diagnosis', 'procedure'] as $typeName) {
+                foreach ($this->items[$typeName] as $idx => $items) {
+                    $codes[$typeName][$idx] = \array_keys($items);
+                }
+            }
+            $this->codes = $codes;
+        }
+        return $this->codes;
     }
 }

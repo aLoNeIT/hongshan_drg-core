@@ -16,6 +16,16 @@ class ExcludeProcedure extends Base
     /** @inheritDoc */
     public function detect(MedicalRecord $medicalRecord, array $items): bool
     {
-        return true;
+        // 主手术和其他手术合并为数组
+        $procedures = [
+            ...($medicalRecord->majorProcedure ? [$medicalRecord->majorProcedure] : []),
+            ...$medicalRecord->secondaryProcedure
+        ];
+        // 计算交集
+        $intersect = array_intersect($procedures, $items['procedure'][0] ?? []);
+        // 再和手术集合计算差集
+        $diff = array_diff($intersect, $procedures);
+        // 如果无差集，说明手术都在排除列表中
+        return !empty($diff);
     }
 }

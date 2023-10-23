@@ -8,18 +8,19 @@ use hsdrg\struct\MedicalRecord;
 
 /**
  * 无手术的匹配的处理器
+ * 
+ * @author 王阮强 <wangruanqiang@hongshanhis.com>
  */
 class NoProcedure extends Base
 {
     /** @inheritDoc */
     public function detect(MedicalRecord $medicalRecord, array $items): bool
     {
-        if ((\is_null($medicalRecord->majorProcedure)
-                || '' === $medicalRecord->majorProcedure)
-            && empty($medicalRecord->secondaryProcedure)
-        ) {
-            return true;
-        }
-        return false;
+        // 主手术和其他手术合并为数组
+        $procedures = [
+            ...($medicalRecord->majorProcedure ? [$medicalRecord->majorProcedure] : []),
+            ...$medicalRecord->secondaryProcedure
+        ];
+        return empty($procedures);
     }
 }
