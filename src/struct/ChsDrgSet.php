@@ -118,7 +118,7 @@ class ChsDrgSet extends Base implements ICollection, IDRGProcessor
     /**
      * 载入医疗保险drg付费分组
      *
-     * @param array $data 严重并发症或合并症数据
+     * @param array $data drg数据
      * @param boolean $clear 是否清理已有的数据，默认true
      * @return self 返回当前对象
      */

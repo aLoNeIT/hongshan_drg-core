@@ -19,5 +19,5 @@ interface ICollection
      * @param array $data 子项数据
      * @return static 返回当前对象
      */
-    public function loadItems(array $data): self
+    public function loadItems(array $data): self;
 }
