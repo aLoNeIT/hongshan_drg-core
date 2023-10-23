@@ -11,7 +11,7 @@ use hsdrg\struct\MedicalRecord;
  * 
  * @author 王阮强 <wangruanqiang@hongshanhis.com>
  */
-interface IDrgProcessor
+interface IDRGProcessor
 {
     /**
      * drg分组处理

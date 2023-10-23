@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace hsdrg\struct;
 
 use hsdrg\interfaces\ICollection;
-use hsdrg\interfaces\IDrgProcessor;
+use hsdrg\interfaces\IDRGProcessor;
 use hsdrg\trait\Collection;
 use hsdrg\Util;
 
@@ -14,7 +14,7 @@ use hsdrg\Util;
  * 
  * @author 王阮强 <wangruanqiang@hongshanhis.com>
  */
-class ChsDrgSet extends Base implements ICollection, IDrgProcessor
+class ChsDrgSet extends Base implements ICollection, IDRGProcessor
 {
 
     use Collection;

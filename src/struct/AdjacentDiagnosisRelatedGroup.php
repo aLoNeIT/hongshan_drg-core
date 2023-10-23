@@ -6,7 +6,7 @@ namespace hsdrg\struct;
 
 use hsdrg\interfaces\ICollection;
 use hsdrg\interfaces\IDetectProcessor;
-use hsdrg\interfaces\IDrgProcessor;
+use hsdrg\interfaces\IDRGProcessor;
 use hsdrg\processor\adrg\{
     AnyProcedure,
     ExcludeProcedure,
@@ -27,7 +27,7 @@ use hsdrg\Util;
  * 
  * @author 王阮强 <wangruanqiang@hongshanhis.com>
  */
-class AdjacentDiagnosisRelatedGroup extends Base implements IDrgProcessor, ICollection
+class AdjacentDiagnosisRelatedGroup extends Base implements IDRGProcessor, ICollection
 {
     /**
      * 规则集合编码
