@@ -1,6 +1,6 @@
 {
     "name": "xryf/hongshan_drg-core",
-    "description": "\u0015\u0015\u0015\u0015DRG\u0015\u0015\u0015\u0015",
+    "description": "红杉健康DRG分组器核心类库",
     "type": "library",
     "license": "MulanPSL-2.0",
     "authors": [
