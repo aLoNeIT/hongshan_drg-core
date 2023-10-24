@@ -20,7 +20,7 @@ class Driver implements IDRGProcessor
      *
      * @var ChsDrgSet
      */
-    protected $chsDrgSet = null;
+    protected $chsDrgSet = [];
     /**
      * 配置信息
      *
@@ -62,6 +62,19 @@ class Driver implements IDRGProcessor
     {
     }
     /**
+     * 切换DRG集合
+     *
+     * @param string $code drgSet集合编码
+     * @return ChsDrgSet 返回切换后的DRG集合
+     */
+    public function switch(string $code): ChsDrgSet
+    {
+        if (!isset($this->chsDrgSet[$code])) {
+            $this->chsDrgSet[$code] = new ChsDrgSet();
+        }
+        return $this->chsDrgSet[$code];
+    }
+    /**
      * 加载数据
      *
      * @param array $data 数据内容，包含节点cc、mcc、cc_exclude、mdc、drg
@@ -69,7 +82,7 @@ class Driver implements IDRGProcessor
      */
     public function load(string $code, string $name, array $data): self
     {
-        $this->chsDrgSet = (new ChsDrgSet())->load([
+        $this->switch($code)->load([
             'code' => $code,
             'name' => $name,
         ])->loadItems($data['mdc'])->loadCC($data['cc'])

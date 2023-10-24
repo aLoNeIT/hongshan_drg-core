@@ -263,6 +263,7 @@ class Util
             case '<=':
                 $result = $props[$key] <= $value;
                 break;
+            case '<>':
             case '!=':
                 $result = $props[$key] != $value;
                 break;
