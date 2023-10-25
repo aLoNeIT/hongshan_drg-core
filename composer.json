@@ -1,5 +1,5 @@
 {
-    "name": "xryf/hongshan_drg-core",
+    "name": "hongshanhealth/drg-core",
     "description": "红杉健康DRG分组器核心类库",
     "type": "library",
     "license": "MulanPSL-2.0",
@@ -11,7 +11,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "hsdrg\\": "src"
+            "hsdrg\\": "src",
+            "hsdrg\\tests\\": "tests"
         }
     },
     "require": {
