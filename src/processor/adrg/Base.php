@@ -20,6 +20,7 @@ use hsdrg\processor\Base as BaseProcessor;
  * - 无手术
  * - 包含主要诊断或主要操作，RE1、RG1
  * - 单主诊断和双手术组合（手术需要匹配手术表1和手术表2），IB1
+ * - 单主诊断和单主手术,BB1
  * 
  * @author 王阮强 <wangruanqiang@hongshanhis.com>
  */

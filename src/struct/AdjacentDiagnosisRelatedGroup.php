@@ -15,7 +15,7 @@ use hsdrg\processor\adrg\{
     SingleMajorProcedure,
     SinglePrincipalDiagnosis,
     SinglePrincipalDiagnosisAndMultiProcedure,
-    SingleMajorProcedureAndSecondaryProcedure,
+    SinglePrincipalDiagnosisAndMajorProcedure,
     SinglePrincipalDiagnosisAndTwoProcedure,
     SinglePrincipalDiagnosisOrMajorProcedure,
     TwoProcedure
@@ -129,7 +129,7 @@ class AdjacentDiagnosisRelatedGroup extends Base implements IDRGProcessor, IColl
      */
     public const PROCESSOR_MAP = [
         1 => SinglePrincipalDiagnosis::class,
-        2 => SinglePrincipalDiagnosisOrMajorProcedure::class,
+        2 => SingleMajorProcedure::class,
         3 => TwoProcedure::class,
         4 => SinglePrincipalDiagnosisAndMultiProcedure::class,
         5 => SingleDiagnosis::class,
@@ -138,6 +138,7 @@ class AdjacentDiagnosisRelatedGroup extends Base implements IDRGProcessor, IColl
         8 => NoProcedure::class,
         9 => SinglePrincipalDiagnosisOrMajorProcedure::class,
         10 => SinglePrincipalDiagnosisAndTwoProcedure::class,
+        11 => SinglePrincipalDiagnosisAndMajorProcedure::class,
     ];
 
     /**
