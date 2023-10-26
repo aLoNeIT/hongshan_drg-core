@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace hsdrg\struct;
 
-use hsdrg\Util;
-
 /**
  * 病历类
  * 
  * @author 王阮强 <wangruanqiang@hongshanhis.com>
  */
-class MedicalRecord
+class MedicalRecord extends Base
 {
     /**
      * 就诊编码

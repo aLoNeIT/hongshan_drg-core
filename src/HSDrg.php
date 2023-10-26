@@ -9,7 +9,7 @@ namespace hsdrg;
  * 
  * @author 王阮强 <wangruanqiang@hongshanhis.com>
  */
-final class HSDrg
+class HSDrg
 {
     protected $config = [
         // 驱动方式
