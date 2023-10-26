@@ -151,6 +151,7 @@ class ChsDrgSet extends Base implements ICollection, IDRGProcessor
     /** @inheritDoc */
     public function process(MedicalRecord $medicalRecord): array
     {
+        $jResult = Util::jerror(2);
         // 依次循环mdc，如果当前mdc的入组规则匹配，则返回当前mdc的adrg
         /** @var MajorDiagnosticCategory $mdc */
         foreach ($this->items as $mdc) {
