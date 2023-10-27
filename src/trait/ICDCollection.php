@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace hsdrg\trait;
 
 use hsdrg\HSDrgException;
-use hsdrg\struct\InternationalClassificationDiseases;
 
 /**
  * ICD数据集合
@@ -71,27 +70,26 @@ trait ICDCollection
     public function loadICD(array $data): static
     {
         $class = $this->icdItemClass;
-        if (!class_exists($class)) {
-            throw new HSDrgException('ICD子项类不存在');
-        }
-        // 循环每一条数据，转化为需要的对象
-        foreach ($data as $item) {
-            /** @var \hsdrg\struct\Base $obj */
-            $obj = new $class();
-            $obj->load($item);
-            /** @var ItemStruct $obj */
-            switch ($obj->type) {
-                case 1: // 诊断
-                    $this->icdCollection['diagnosis'][$obj->index][$obj->code] = $obj;
-                    $this->icdCodes['diagnosis'][$obj->index][] = $obj->code;
-                    break;
-                case 2: //手术或操作
-                    $this->icdCollection['procedure'][$obj->index][$obj->code] = $obj;
-                    $this->icdCodes['procedure'][$obj->index][] = $obj->code;
-                    break;
-                default:
-                    // 跳过
-                    break;
+        if (class_exists($class)) {
+            // 循环每一条数据，转化为需要的对象
+            foreach ($data as $item) {
+                /** @var \hsdrg\struct\Base $obj */
+                $obj = new $class();
+                $obj->load($item);
+                /** @var ItemStruct $obj */
+                switch ($obj->type) {
+                    case 1: // 诊断
+                        $this->icdCollection['diagnosis'][$obj->index][$obj->code] = $obj;
+                        $this->icdCodes['diagnosis'][$obj->index][] = $obj->code;
+                        break;
+                    case 2: //手术或操作
+                        $this->icdCollection['procedure'][$obj->index][$obj->code] = $obj;
+                        $this->icdCodes['procedure'][$obj->index][] = $obj->code;
+                        break;
+                    default:
+                        // 跳过
+                        break;
+                }
             }
         }
         return $this;

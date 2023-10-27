@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace hsdrg\trait;
 
+use hsdrg\interfaces\IChildCollection;
+use hsdrg\trait\ICDCollection;
 use hsdrg\Util;
 
 /**
@@ -25,37 +27,6 @@ trait ChildCollection
      * @var array
      */
     protected $children = [];
-
-    /**
-     * 加载数据
-     *
-     * @param array $data 数据
-     * @return static 返回当前对象
-     */
-    public function load(array $data): static
-    {
-        // 处理子项数据
-        $children = null;
-        if (isset($data['children'])) {
-            $children = $data['children'];
-            unset($data['children']);
-        }
-        // 获取当前对象的所有公共属性
-        $props = Util::getPublicProps($this);
-        // 遍历传递进来的数据，如果当前对象的属性存在，则赋值
-        foreach ($data as $key => $value) {
-            // data中的key是下划线命名法，而当前对象的属性是驼峰命名法，所以需要转换
-            $newKey = Util::camel($key);
-            if (isset($props[$newKey])) {
-                $this->$newKey = $value;
-            }
-        }
-        // 加载子项数据
-        if (!\is_null($children)) {
-            $this->loadChildren($children);
-        }
-        return $this;
-    }
     /**
      * 加载子数据
      *
@@ -69,10 +40,18 @@ trait ChildCollection
         if (!\is_null($this->childClass) && \class_exists($this->childClass)) {
             $childClass = $this->childClass;
             foreach ($data as $item) {
-                /** @var Collection $child */
+                /** @var \hsdrg\struct\Base $child */
                 $child = new $childClass();
                 $child->load($item);
                 $this->children[] = $child;
+                // 判断是否存在icd数据，如果存在，则加载icd数据
+                if ($child instanceof ICDCollection && isset($item['icds'])) {
+                    $child->loadICD($item['icds']);
+                }
+                // 再判断当前对象中是否存在children数据，如果存在，则加载子项数据
+                if ($child instanceof ChildCollection && isset($item['children'])) {
+                    $child->loadChildren($item['children']);
+                }
             }
         }
         return $this;

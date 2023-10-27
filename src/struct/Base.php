@@ -48,12 +48,12 @@ abstract class Base
     {
         // 获取当前对象的所有公共属性
         $props = Util::getPublicProps($this);
-        // 遍历传递进来的数据，如果当前对象的属性存在，则赋值
-        foreach ($data as $key => $value) {
+        // 遍历当前对象的所有属性，如果传递进来的数据中存在，则赋值
+        foreach ($props as $key => $value) {
             // data中的key是下划线命名法，而当前对象的属性是驼峰命名法，所以需要转换
-            $newKey = Util::camel($key);
-            if (isset($props[$newKey])) {
-                $this->$newKey = $value;
+            $newKey = Util::snake($key);
+            if (isset($data[$newKey])) {
+                $this->$key = $data[$newKey];
             }
         }
         return $this;
