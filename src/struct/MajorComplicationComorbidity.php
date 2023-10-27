@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace hsdrg\struct;
 
-use hsdrg\trait\Collection;
-
 /**
  * 严重并发症或合并症
  * 
@@ -13,7 +11,6 @@ use hsdrg\trait\Collection;
  */
 class MajorComplicationComorbidity extends Base
 {
-    use Collection;
     /**
      * 规则集合编码
      *

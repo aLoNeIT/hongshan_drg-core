@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace hsdrg\struct;
 
-use hsdrg\interfaces\ICollection;
-use hsdrg\interfaces\IDRGProcessor;
-use hsdrg\trait\Collection;
+use hsdrg\HSDrgConstant;
+use hsdrg\interfaces\IDetectProcessor;
+use hsdrg\interfaces\{IChildCollection, IDRGProcessor};
+use hsdrg\trait\{ChildCollection, ICDCollection};
 use hsdrg\Util;
 
 /**
@@ -14,9 +15,10 @@ use hsdrg\Util;
  * 
  * @author 王阮强 <wangruanqiang@hongshanhis.com>
  */
-class MajorDiagnosticCategory extends Base implements IDRGProcessor, ICollection
+class MajorDiagnosticCategory extends Base implements IDRGProcessor, IChildCollection
 {
-    use Collection;
+    use ChildCollection;
+    use ICDCollection;
 
     /**
      * 规则集合编码
@@ -38,12 +40,6 @@ class MajorDiagnosticCategory extends Base implements IDRGProcessor, ICollection
      */
     public $name = null;
     /**
-     * 主要诊断集合，每个元素都是一个icd9|icd10编码
-     * 
-     * @var array
-     */
-    public $diagnosis = [];
-    /**
      * 入组规则集合，自定义的条件表达式，会在入组前先根据规则做校验
      * 
      * [
@@ -55,12 +51,41 @@ class MajorDiagnosticCategory extends Base implements IDRGProcessor, ICollection
      * @var array
      */
     public $conditions = [];
+    /**
+     * 处理器类型
+     *
+     * @var integer|null
+     */
+    public $processorType = null;
+    /**
+     * 处理器
+     *
+     * @var object|null
+     */
+    private $processor = null;
 
     /** @inheritDoc */
     protected function initialize(): void
     {
         parent::initialize();
-        $this->itemClass = AdjacentDiagnosisRelatedGroup::class;
+        $this->childClass = AdjacentDiagnosisRelatedGroup::class;
+        $this->icdItemClass = MajorDiagnosticCategoryItem::class;
+    }
+    /**
+     * 获取adrg分组处理器
+     *
+     * @return IDetectProcessor 返回adrg处理器对象
+     */
+    public function getProcessor(): IDetectProcessor
+    {
+        if (!\is_null($this->processor)) {
+            return $this->processor;
+        }
+        $processMap = HSDrgConstant::MDC_PROCESSOR_MAP;
+        if (isset($processMap[$this->processorType])) {
+            $this->processor = new $processMap[$this->processorType]();
+        }
+        return $this->processor;
     }
     /** @inheritDoc */
     public function process(MedicalRecord $medicalRecord): array
@@ -71,19 +96,17 @@ class MajorDiagnosticCategory extends Base implements IDRGProcessor, ICollection
         if (false === $result) {
             return Util::jerror(11);
         }
-        // 特殊的MDCZ，需要做多诊断匹配
-        if ('Z' == Util::upper($this->code)) {
-        } else {
-            // 要求当前病案信息的主要诊断属于当前mdc的诊断集合
-            if (!isset($this->diagnosis[$medicalRecord->principalDiagnosis])) {
-                return Util::jerror(11);
-            }
+        // 获取对应处理器，使用处理器进行匹配
+        $processor = $this->getProcessor();
+        $result = $processor->detect($medicalRecord, $this->icdCodes);
+        if (!$result) {
+            return Util::jerror(11);
         }
         // 满足条件，开始进行adrg的匹配
         $adrgCode = null;
-        /** @var AdjacentDiagnosisRelatedGroup $ardg */
-        foreach ($this->items as $ardg) {
-            $jResult = $ardg->process($medicalRecord);
+        /** @var AdjacentDiagnosisRelatedGroup $adrg */
+        foreach ($this->children as $adrg) {
+            $jResult = $adrg->process($medicalRecord);
             if (Util::isSuccess($jResult)) {
                 $adrgCode = Util::getJMsg($jResult);
                 break;

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace hsdrg\struct;
 
-use hsdrg\trait\Collection;
-
 /**
  * 核心疾病诊断相关分组子项
  * 
@@ -13,7 +11,6 @@ use hsdrg\trait\Collection;
  */
 class AdjacentDiagnosisRelatedGroupItem extends Base
 {
-    use Collection;
     /**
      * 规则集合编码
      *

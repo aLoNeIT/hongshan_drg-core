@@ -4,23 +4,31 @@ declare(strict_types=1);
 
 namespace hsdrg\struct;
 
+use hsdrg\trait\ItemStruct;
+
 /**
- * 并发症或合并症排除诊断集合
+ * 主要诊断大类的入组子项
  * 
  * @author 王阮强 <wangruanqiang@hongshanhis.com>
  */
-class ComplicationComorbidityExclude extends Base
+class MajorDiagnosticCategoryItem extends Base
 {
-
+    use ItemStruct;
     /**
      * 规则集合编码
      *
-     * @var string
+     * @var string|null
      */
     public $drgSetCode = null;
     /**
-     * 编码
+     * 疾病编码
      *
+     * @var string|null
+     */
+    public $mdcCode = null;
+    /**
+     * 编码
+     * 
      * @var string|null
      */
     public $code = null;
@@ -30,10 +38,4 @@ class ComplicationComorbidityExclude extends Base
      * @var string|null
      */
     public $name = null;
-    /**
-     * 排除表编码
-     *
-     * @var string|null
-     */
-    public $groupCode = null;
 }

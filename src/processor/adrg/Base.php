@@ -24,6 +24,6 @@ use hsdrg\processor\Base as BaseProcessor;
  * 
  * @author 王阮强 <wangruanqiang@hongshanhis.com>
  */
-abstract class Base extends BaseProcessor implements IDetectProcessor
+abstract class Base extends BaseProcessor
 {
 }

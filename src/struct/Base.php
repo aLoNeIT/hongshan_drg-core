@@ -37,4 +37,25 @@ abstract class Base
     {
         return Util::getPublicProps($this);
     }
+
+    /**
+     * 加载数据
+     *
+     * @param array $data 数据
+     * @return static 返回当前对象
+     */
+    public function load(array $data): static
+    {
+        // 获取当前对象的所有公共属性
+        $props = Util::getPublicProps($this);
+        // 遍历传递进来的数据，如果当前对象的属性存在，则赋值
+        foreach ($data as $key => $value) {
+            // data中的key是下划线命名法，而当前对象的属性是驼峰命名法，所以需要转换
+            $newKey = Util::camel($key);
+            if (isset($props[$newKey])) {
+                $this->$newKey = $value;
+            }
+        }
+        return $this;
+    }
 }

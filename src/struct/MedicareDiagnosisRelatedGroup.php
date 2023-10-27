@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace hsdrg\struct;
 
-use hsdrg\trait\Collection;
-
 /**
  * 医疗保险drg付费分组
  * 
@@ -13,7 +11,6 @@ use hsdrg\trait\Collection;
  */
 class MedicareDiagnosisRelatedGroup extends Base
 {
-    use Collection;
     /**
      * 规则集合编码
      *

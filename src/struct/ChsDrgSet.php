@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace hsdrg\struct;
 
-use hsdrg\interfaces\ICollection;
+use hsdrg\interfaces\IChildCollection;
 use hsdrg\interfaces\IDRGProcessor;
-use hsdrg\trait\Collection;
+use hsdrg\trait\ChildCollection;
 use hsdrg\Util;
 
 /**
@@ -14,10 +14,10 @@ use hsdrg\Util;
  * 
  * @author 王阮强 <wangruanqiang@hongshanhis.com>
  */
-class ChsDrgSet extends Base implements ICollection, IDRGProcessor
+class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
 {
 
-    use Collection;
+    use ChildCollection;
 
     /**
      * 编码
@@ -73,7 +73,7 @@ class ChsDrgSet extends Base implements ICollection, IDRGProcessor
     protected function initialize(): void
     {
         parent::initialize();
-        $this->itemClass = MajorDiagnosticCategory::class;
+        $this->childClass = MajorDiagnosticCategory::class;
     }
     /**
      * 载入严重并发症或合并症
@@ -154,7 +154,7 @@ class ChsDrgSet extends Base implements ICollection, IDRGProcessor
         $jResult = Util::jerror(2);
         // 依次循环mdc，如果当前mdc的入组规则匹配，则返回当前mdc的adrg
         /** @var MajorDiagnosticCategory $mdc */
-        foreach ($this->items as $mdc) {
+        foreach ($this->children as $mdc) {
             $jResult = $mdc->process($medicalRecord);
             $state = Util::getJState($jResult);
             // 只有未匹配到的时候才继续循环，其他情况都中断返回

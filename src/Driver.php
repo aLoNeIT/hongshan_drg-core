@@ -85,7 +85,7 @@ class Driver implements IDRGProcessor
         $this->switch($code)->load([
             'code' => $code,
             'name' => $name,
-        ])->loadItems($data['mdc'])->loadCC($data['cc'])
+        ])->loadChildren($data['mdc'])->loadCC($data['cc'])
             ->loadMCC($data['mcc'])->loadCCExclude($data['cc_exclude'])
             ->loadDRG($data['drg']);
         return $this;
