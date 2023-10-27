@@ -73,7 +73,7 @@ class HSDrg
     {
         $driver = $driver ?: $this->config['default'];
         // 驱动已经存在直接返回
-        if ($this->drivers[$driver] && !$newInstance) {
+        if (isset($this->drivers[$driver]) && !$newInstance) {
             return $this->drivers[$driver];
         }
         $config = $this->config['stores'][$driver];
