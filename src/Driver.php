@@ -113,4 +113,18 @@ class Driver implements IDRGProcessor
                 . ($msg ? "[{$msg}]" : '')
         );
     }
+    /**
+     * 获取当前驱动的数据
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $result = [];
+        /** @var ChsDrgSet $item */
+        foreach ($this->chsDrgSet as $key => $item) {
+            $result[$key] = $item->toArray();
+        }
+        return $result;
+    }
 }
