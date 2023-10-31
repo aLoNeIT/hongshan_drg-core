@@ -79,7 +79,7 @@ class AdjacentDiagnosisRelatedGroup extends Base implements IDRGProcessor
      * @var object|null
      */
     private $processor = null;
-
+    /** @inherited */
     protected function initialize(): void
     {
         parent::initialize();

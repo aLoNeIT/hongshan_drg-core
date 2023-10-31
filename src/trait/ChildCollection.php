@@ -56,4 +56,17 @@ trait ChildCollection
         }
         return $this;
     }
+    /**
+     * 转换为数组
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $data = \array_merge(Util::getPublicProps($this),[
+            'children'=>\array_map(function(\hsdrg\struct\Base $item){
+                return $item->toArray();
+            },$this->children);
+        ]) ;
+    }
 }
