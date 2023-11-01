@@ -108,7 +108,7 @@ class AdjacentDiagnosisRelatedGroup extends Base implements IDRGProcessor
         // 计算当前condition是否满足
         $result = Util::detectFormulaArray($medicalRecord, $this->condition);
         if (false === $result) {
-            return Util::jerror(11);
+            return Util::jerror(15);
         }
         // 创建adrg处理器，进行检测
         $processor = $this->getProcessor();

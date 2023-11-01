@@ -42,9 +42,37 @@ return [
             'age' => 30,
             'in_days' => 15,
             'out_type' => 1,
-            'principal_diagnosis' => 's01.800x011',
+            'principal_diagnosis' => 'S01.800x011',
             'secondary_diagnosis' => [],
-            'major_procedure' => null,
+            'major_procedure' => '01.0900x006',
+            'secondary_procedure' => []
+        ]
+    ], [
+        // 单主诊断+单主手术（严重并发症）
+        'drg_code' => 'BB11',
+        'medical_record' => [
+            'code' => '1',
+            'sex' => 2,
+            'age' => 30,
+            'in_days' => 15,
+            'out_type' => 1,
+            'principal_diagnosis' => 'S01.800x011',
+            'secondary_diagnosis' => ['A01.100'],
+            'major_procedure' => '01.0900x006',
+            'secondary_procedure' => []
+        ]
+    ], [
+        // 单手术
+        'drg_code' => 'BB25',
+        'medical_record' => [
+            'code' => '1',
+            'sex' => 2,
+            'age' => 30,
+            'in_days' => 15,
+            'out_type' => 1,
+            'principal_diagnosis' => 'A39.900',
+            'secondary_diagnosis' => [],
+            'major_procedure' => '01.0900x006',
             'secondary_procedure' => []
         ]
     ]

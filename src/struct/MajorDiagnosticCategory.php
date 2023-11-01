@@ -115,7 +115,7 @@ class MajorDiagnosticCategory extends Base implements IDRGProcessor, IChildColle
         }
         // 如果adrgCode为null，说明没有匹配到adrg，此时返回特定错误码，和歧义组编码
         if (\is_null($adrgCode)) {
-            return \in_array($this->code, ['A', 'P', 'Y', 'Z'])
+            return \in_array($this->code, ['A'])
                 ? Util::jerror(11)
                 : Util::jerror(12, "{$this->code}QY");
         }
