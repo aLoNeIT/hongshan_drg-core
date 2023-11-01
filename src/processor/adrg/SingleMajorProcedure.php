@@ -17,7 +17,7 @@ class SingleMajorProcedure extends Base
     public function detect(MedicalRecord $medicalRecord, array $items): bool
     {
         // 获取当前adrg下的主诊断数据，单诊断模式下只有表0
-        $diagnosis = $items['diagnosis'][0] ?? [];
-        return isset($diagnosis[$medicalRecord->principalDiagnosis]);
+        $procedure = $items['procedure'][0] ?? [];
+        return \in_array($medicalRecord->majorProcedure, $procedure);
     }
 }

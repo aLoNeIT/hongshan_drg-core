@@ -13,7 +13,7 @@ use hsdrg\struct\MedicalRecord;
  * 
  * @author 王阮强 <wangruanqiang@hongshanhis.com>
  */
-class Driver implements IDRGProcessor
+class Driver
 {
     /**
      * drg集合
@@ -90,13 +90,17 @@ class Driver implements IDRGProcessor
             ->loadDRG($data['drg']);
         return $this;
     }
-    /** @inheritDoc */
-    public function process(MedicalRecord $medicalRecord): array
+    /**
+     * drg分组处理
+     * 
+     * @param string $drgSetCode drgSet集合编码
+     * @param MedicalRecord $medicalRecord 病案信息
+     * @return array 返回JsonTable格式的数组数据，msg节点是匹配到的编码
+     */
+    public function process(string $drgSetCode, MedicalRecord $medicalRecord): array
     {
-        if (\is_null($this->chsDrgSet)) {
-            return $this->jcode(2);
-        }
-        $result = $this->chsDrgSet->process($medicalRecord);
+        $chsDrgSet = $this->switch($drgSetCode);
+        $result = $chsDrgSet->process($medicalRecord);
         return $this->jcode(Util::getJState($result), Util::getJMsg($result));
     }
     /**
@@ -107,10 +111,14 @@ class Driver implements IDRGProcessor
      */
     protected function jcode(int $code, ?string $msg = null): array
     {
+        if (0 == $code) {
+            // 成功
+            return Util::jsuccess($msg);
+        }
+        $errMsg = $this->errCode[(string)$code] ?? '系统异常';
         return Util::jerror(
             $code,
-            $this->errCode[(string)$code] ?? '系统异常'
-                . ($msg ? "[{$msg}]" : '')
+            $errMsg . (!\is_null($msg) ? "[{$msg}]" : '')
         );
     }
     /**

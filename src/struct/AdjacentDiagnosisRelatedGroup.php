@@ -52,7 +52,7 @@ class AdjacentDiagnosisRelatedGroup extends Base implements IDRGProcessor
      *
      * @var array
      */
-    public $conditions = [];
+    public $condition = [];
     /**
      * 处理器类型
      *
@@ -105,14 +105,17 @@ class AdjacentDiagnosisRelatedGroup extends Base implements IDRGProcessor
     /** @inheritDoc */
     public function process(MedicalRecord $medicalRecord): array
     {
-        // 计算当前conditions是否满足
-        $result = Util::detectFormulaArray($medicalRecord, $this->conditions);
+        // 计算当前condition是否满足
+        $result = Util::detectFormulaArray($medicalRecord, $this->condition);
         if (false === $result) {
             return Util::jerror(11);
         }
         // 创建adrg处理器，进行检测
         $processor = $this->getProcessor();
         $result = $processor->detect($medicalRecord, $this->icdCodes);
+        // if ('BR1' == $this->code) {
+        //     var_dump([$this->icdCodes, $processor,  $medicalRecord->toArray(), $result]);
+        // }
         return $result ? Util::jsuccess($this->code) : Util::jerror();
     }
 }

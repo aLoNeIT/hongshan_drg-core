@@ -22,7 +22,7 @@ class TwiceDiagnosis extends Base
             ...$medicalRecord->secondaryDiagnosis
         ];
         $matchCount = 0;
-        foreach ($items as $item) {
+        foreach ($items['diagnosis'] as $item) {
             // 计算交集
             $intersect = array_intersect($diagnosis, $item);
             if (!empty($intersect)) {

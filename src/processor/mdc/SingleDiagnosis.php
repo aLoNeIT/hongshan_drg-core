@@ -22,7 +22,7 @@ class SingleDiagnosis extends Base
             ...$medicalRecord->secondaryDiagnosis
         ];
         // 计算交集
-        $intersect = array_intersect($diagnosis, $items[0]);
+        $intersect = array_intersect($diagnosis, $items['diagnosis'][0] ?? []);
         return !empty($intersect);
     }
 }

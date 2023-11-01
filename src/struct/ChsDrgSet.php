@@ -90,7 +90,7 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
         }
         foreach ($data as $item) {
             $mcc = (new MajorComplicationComorbidity())->load($item);
-            $this->mccItems[] = $mcc;
+            $this->mccItems[$mcc->code] = $mcc;
             $this->mccCodeItems[] = $mcc->code;
         }
         return $this;
@@ -110,7 +110,7 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
         }
         foreach ($data as $item) {
             $cc = (new ComplicationComorbidity())->load($item);
-            $this->ccItems[] = $cc;
+            $this->ccItems[$cc->code] = $cc;
             $this->ccCodeItems[] = $cc->code;
         }
         return $this;
@@ -224,6 +224,7 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
         // 交集不为空，说明次要诊断中存在匹配的并发症或合并症，此时依次判断主诊断是否在排除表内
         $diagnosis = null;
         foreach ($codes as $code) {
+            // var_dump(['cc_item' => $codes, 'count' => count($ccItems), 'cc_obj' => $ccItems]);
             /** @var MajorComplicationComorbidity $cc */
             $cc = $ccItems[$code];
             $excludeGroupCode =  $cc->excludeGroupCode;

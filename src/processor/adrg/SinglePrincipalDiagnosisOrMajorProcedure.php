@@ -18,7 +18,7 @@ class SinglePrincipalDiagnosisOrMajorProcedure extends Base
     {
         $diagnosis = $items['diagnosis'][0] ?? [];
         $proceudre = $items['procedure'][0] ?? [];
-        return isset($diagnosis[$medicalRecord->principalDiagnosis])
-            || isset($proceudre[$medicalRecord->majorProcedure]);
+        return \in_array($medicalRecord->principalDiagnosis, $diagnosis)
+            || \in_array($medicalRecord->majorProcedure, $proceudre);
     }
 }

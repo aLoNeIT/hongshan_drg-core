@@ -44,12 +44,16 @@ trait ChildCollection
                 $child = new $childClass();
                 $child->load($item);
                 $this->children[] = $child;
+                // 获取该类所有引用到的trait
+                $allTraits = Util::classUsesRecursive($child);
                 // 判断是否存在icd数据，如果存在，则加载icd数据
-                if ($child instanceof ICDCollection && isset($item['icds'])) {
+                if (\in_array(ICDCollection::class, $allTraits) && isset($item['icds'])) {
+                    /** @var ICDCollection $child */
                     $child->loadICD($item['icds']);
                 }
                 // 再判断当前对象中是否存在children数据，如果存在，则加载子项数据
-                if ($child instanceof ChildCollection && isset($item['children'])) {
+                if (\in_array(ChildCollection::class, $allTraits) && isset($item['children'])) {
+                    /** @var ChildCollection $child */
                     $child->loadChildren($item['children']);
                 }
             }
@@ -63,10 +67,11 @@ trait ChildCollection
      */
     public function toArray(): array
     {
-        $data = \array_merge(Util::getPublicProps($this),[
-            'children'=>\array_map(function(\hsdrg\struct\Base $item){
+        $data = \array_merge(Util::getPublicProps($this), [
+            'children' => \array_map(function (\hsdrg\struct\Base $item) {
                 return $item->toArray();
-            },$this->children);
-        ]) ;
+            }, $this->children)
+        ]);
+        return $data;
     }
 }

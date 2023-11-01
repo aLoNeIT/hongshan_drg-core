@@ -50,7 +50,7 @@ class MajorDiagnosticCategory extends Base implements IDRGProcessor, IChildColle
      *
      * @var array
      */
-    public $conditions = [];
+    public $condition = [];
     /**
      * 处理器类型
      *
@@ -82,6 +82,7 @@ class MajorDiagnosticCategory extends Base implements IDRGProcessor, IChildColle
             return $this->processor;
         }
         $processMap = HSDrgConstant::MDC_PROCESSOR_MAP;
+        // var_dump([Util::getPublicProps($this), $processMap]);
         if (isset($processMap[$this->processorType])) {
             $this->processor = new $processMap[$this->processorType]();
         }
@@ -92,7 +93,7 @@ class MajorDiagnosticCategory extends Base implements IDRGProcessor, IChildColle
     {
         // 先根据当前mdc的入组规则进行匹配
         // 要求先满足condition内的所有条件，再满足病案信息中的主要诊断符合diagosis内的任意一个
-        $result = Util::detectFormulaArray($medicalRecord, $this->conditions);
+        $result = Util::detectFormulaArray($medicalRecord, $this->condition);
         if (false === $result) {
             return Util::jerror(11);
         }
@@ -114,8 +115,12 @@ class MajorDiagnosticCategory extends Base implements IDRGProcessor, IChildColle
         }
         // 如果adrgCode为null，说明没有匹配到adrg，此时返回特定错误码，和歧义组编码
         if (\is_null($adrgCode)) {
-            return Util::jerror(12, "{$this->code}QY");
+            return \in_array($this->code, ['A', 'P', 'Y', 'Z'])
+                ? Util::jerror(11)
+                : Util::jerror(12, "{$this->code}QY");
         }
         return Util::jsuccess("{$this->code}{$adrgCode}");
+        // 因为数据问题，暂时只返回adrgCode
+        // return Util::jsuccess("{$adrgCode}");
     }
 }

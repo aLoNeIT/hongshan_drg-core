@@ -302,4 +302,41 @@ class Util
         }
         return true;
     }
+
+    /**
+     *获取一个类里所有用到的trait，包括父类的
+     *
+     * @param mixed $class 类名
+     * @return array
+     */
+    public static function classUsesRecursive($class): array
+    {
+        if (is_object($class)) {
+            $class = get_class($class);
+        }
+
+        $results = [];
+        $classes = array_merge([$class => $class], class_parents($class));
+        foreach ($classes as $class) {
+            $results += static::traitUsesRecursive($class);
+        }
+
+        return array_unique($results);
+    }
+
+    /**
+     * 获取一个trait里所有引用到的trait
+     *
+     * @param string $trait Trait
+     * @return array
+     */
+    public static function traitUsesRecursive(string $trait): array
+    {
+        $traits = class_uses($trait);
+        foreach ($traits as $trait) {
+            $traits += static::traitUsesRecursive($trait);
+        }
+
+        return $traits;
+    }
 }
