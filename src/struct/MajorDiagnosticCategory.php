@@ -105,11 +105,13 @@ class MajorDiagnosticCategory extends Base implements IDRGProcessor, IChildColle
         }
         // 满足条件，开始进行adrg的匹配
         $adrgCode = null;
+        $adrgData = [];
         /** @var AdjacentDiagnosisRelatedGroup $adrg */
         foreach ($this->children as $adrg) {
             $jResult = $adrg->process($medicalRecord);
             if (Util::isSuccess($jResult)) {
                 $adrgCode = Util::getJMsg($jResult);
+                $adrgData = Util::getJData($jResult);
                 break;
             }
         }
@@ -119,7 +121,11 @@ class MajorDiagnosticCategory extends Base implements IDRGProcessor, IChildColle
                 ? Util::jerror(11)
                 : Util::jerror(12, "{$this->code}QY");
         }
-        return Util::jsuccess("{$this->code}{$adrgCode}");
+        return Util::jsuccess("{$this->code}{$adrgCode}", [
+            'code' => $this->code,
+            'name' => $this->name,
+            'adrg' => $adrgData
+        ]);
         // 因为数据问题，暂时只返回adrgCode
         // return Util::jsuccess("{$adrgCode}");
     }

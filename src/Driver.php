@@ -102,24 +102,27 @@ class Driver
     {
         $chsDrgSet = $this->switch($drgSetCode);
         $result = $chsDrgSet->process($medicalRecord);
-        return $this->jcode(Util::getJState($result), Util::getJMsg($result));
+        return $this->jcode(Util::getJState($result), Util::getJMsg($result), Util::getJData($result));
     }
     /**
-     * 根据错误码获取JsonTable格式信息
+     * 根据状态码获取JsonTable格式信息
      *
-     * @param integer $code 错误码
+     * @param integer $code 状态码
+     * @param string $msg 简要信息
+     * @param mixed $data 数据
      * @return array
      */
-    protected function jcode(int $code, ?string $msg = null): array
+    protected function jcode(int $code, ?string $msg = null, $data = null): array
     {
         if (0 == $code) {
             // 成功
-            return Util::jsuccess($msg);
+            return Util::jsuccess($msg, $data);
         }
         $errMsg = $this->errCode[(string)$code] ?? '系统异常';
         return Util::jerror(
             $code,
-            $errMsg . (!\is_null($msg) && 'failed' != $msg ? "[{$msg}]" : '')
+            $errMsg . (!\is_null($msg) && 'failed' != $msg ? "[{$msg}]" : ''),
+            $data
         );
     }
     /**

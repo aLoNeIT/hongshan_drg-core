@@ -116,6 +116,9 @@ class AdjacentDiagnosisRelatedGroup extends Base implements IDRGProcessor
         // if ('BR1' == $this->code) {
         //     var_dump([$this->icdCodes, $processor,  $medicalRecord->toArray(), $result]);
         // }
-        return $result ? Util::jsuccess($this->code) : Util::jerror();
+        return $result ? Util::jsuccess($this->code, [
+            'code' => $this->code,
+            'name' => $this->name
+        ]) : Util::jerror();
     }
 }

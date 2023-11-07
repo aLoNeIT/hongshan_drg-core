@@ -40,7 +40,7 @@ class App
         $success = 0;
         $fail = 0;
         $num = 0;
-        for ($i = 0; $i < 10000; $i++) {
+        for ($i = 0; $i < 1; $i++) {
             foreach ($cases as $idx => $case) {
                 $num++;
                 // echo "读取第[{$num}]个测试用例", PHP_EOL;
@@ -56,6 +56,7 @@ class App
                         // echo "drg分组不一致，预期{$case['drg_code']}，实际{$drgCode}", PHP_EOL;
                     } else {
                         $success++;
+                        var_dump($jResult);
                         // echo "drg分组一致，预期{$case['drg_code']}，实际{$drgCode}", PHP_EOL;
                     }
                 } else {

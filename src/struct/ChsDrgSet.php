@@ -59,7 +59,7 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
     /**
      * 医疗保险drg付费分组集合，kv格式，k是drg编码，v是一个MedicareDiagnosisRelatedGroup对象
      *
-     * @var array
+     * @var MedicareDiagnosisRelatedGroup[]
      */
     protected $drgItems = [];
     /**
@@ -167,18 +167,26 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
         if (!Util::isSuccess($jResult)) {
             return $jResult;
         }
-        // 如果匹配到了，则继续匹配adrg的严重并发症或合并症
+        // 如果匹配到了，则继续匹配严重并发症或合并症
         $code = Util::getJMsg($jResult);
+        $data = Util::getJData($jResult);
         $ccCode = null;
+        $ccData = null;
         // 匹配mcc
         $jResult = $this->detectCC($medicalRecord, $this->mccItems, $this->mccCodeItems);
         if (Util::isSuccess($jResult)) {
             $ccCode = '1';
+            $ccData = \array_merge([
+                'type' => 'mcc'
+            ], Util::getJData($jResult));
         } else {
             // 匹配cc
             $jResult = $this->detectCC($medicalRecord, $this->ccItems, $this->ccCodeItems);
             if (Util::isSuccess($jResult)) {
                 $ccCode = '3';
+                $ccData = \array_merge([
+                    'type' => 'mcc'
+                ], Util::getJData($jResult));
             } else {
                 $state = Util::getJState($jResult);
                 switch ($state) {
@@ -203,7 +211,22 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
             }
         }
         // 成功生成有效的drg编码
-        return Util::jsuccess($drgCode);
+        return Util::jsuccess($drgCode, [
+            'drg' => [
+                'code' => $drgCode,
+                'name' => $this->drgItems[$drgCode]->name,
+                'weight' => $this->drgItems[$drgCode]->weight,
+            ],
+            'mdc' => [
+                'code' => $data['code'],
+                'name' => $data['name']
+            ],
+            'adrg' => [
+                'code' => $data['adrg']['code'],
+                'name' => $data['adrg']['name']
+            ],
+            'cc' => $ccData
+        ]);
     }
     /**
      * 检测严重并发症或合并症
@@ -223,6 +246,7 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
         }
         // 交集不为空，说明次要诊断中存在匹配的并发症或合并症，此时依次判断主诊断是否在排除表内
         $diagnosis = null;
+        $diagnosisData = null;
         foreach ($codes as $code) {
             // var_dump(['cc_item' => $codes, 'count' => count($ccItems), 'cc_obj' => $ccItems]);
             /** @var MajorComplicationComorbidity $cc */
@@ -232,10 +256,14 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
             $excludeGroup = $this->ccExcludeItems[$excludeGroupCode] ?? [];
             if (!isset($excludeGroup[$medicalRecord->principalDiagnosis])) {
                 $diagnosis = $code;
+                $diagnosisData = [
+                    'code' => $cc->code,
+                    'name' => $cc->name
+                ];
                 break;
             }
         }
         // 校验完毕，diagnosis为null，说明主诊断在排除表内，不符合要求
-        return \is_null($diagnosis) ? Util::jerror(14) : Util::jsuccess($diagnosis);
+        return \is_null($diagnosis) ? Util::jerror(14) : Util::jsuccess($diagnosis, $diagnosisData);
     }
 }
