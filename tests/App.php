@@ -48,21 +48,16 @@ class App
                 // echo \json_encode($case['medical_record'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), PHP_EOL;
                 $medicalRecord = (new MedicalRecord())->load($case['medical_record']);
                 $jResult = $driver->process($code, $medicalRecord);
-                if (Util::isSuccess($jResult)) {
-                    // 获取成功，则对比下是否和预定的drg分组一致
-                    $drgCode = Util::getJMsg($jResult);
-                    if ($drgCode != $case['drg_code']) {
-                        $fail++;
-                        // echo "drg分组不一致，预期{$case['drg_code']}，实际{$drgCode}", PHP_EOL;
-                    } else {
-                        $success++;
-                        var_dump($jResult);
-                        // echo "drg分组一致，预期{$case['drg_code']}，实际{$drgCode}", PHP_EOL;
-                    }
+                $drgCode = Util::getJMsg($jResult);
+                // 先判断drgCode是否和预期一致
+                if ($drgCode == $case['drg_code']) {
+                    // 预期一致
+                    $success++;
+                    echo "drg分组一致，预期{$case['drg_code']}，实际{$drgCode}", PHP_EOL;
                 } else {
+                    // 预期不一致
                     $fail++;
-                    $msg = Util::getJMsg($jResult);
-                    // echo "drg分组失败[{$msg}]，预期{$case['drg_code']}", PHP_EOL;
+                    echo "drg分组不一致，预期{$case['drg_code']}，实际{$drgCode}", PHP_EOL;
                 }
             }
         }

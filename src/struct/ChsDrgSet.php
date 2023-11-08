@@ -163,9 +163,14 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
             }
             break;
         }
-        // 未成功，则直接返回错误
-        if (!Util::isSuccess($jResult)) {
-            return $jResult;
+        // 根据返回值进行不同处理
+        switch (Util::getJState($jResult)) {
+            case 0: // 成功，不处理
+                break;
+            case 11: // 全部mdc都无法入组
+                return Util::jerror(16, '0000');
+            default: // 其他错误
+                return $jResult;
         }
         // 如果匹配到了，则继续匹配严重并发症或合并症
         $code = Util::getJMsg($jResult);

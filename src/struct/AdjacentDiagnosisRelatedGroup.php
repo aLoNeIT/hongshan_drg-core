@@ -113,7 +113,7 @@ class AdjacentDiagnosisRelatedGroup extends Base implements IDRGProcessor
         // 创建adrg处理器，进行检测
         $processor = $this->getProcessor();
         $result = $processor->detect($medicalRecord, $this->icdCodes);
-        // if ('BR1' == $this->code) {
+        // if ('Y1' == $this->code) {
         //     var_dump([$this->icdCodes, $processor,  $medicalRecord->toArray(), $result]);
         // }
         return $result ? Util::jsuccess($this->code, [

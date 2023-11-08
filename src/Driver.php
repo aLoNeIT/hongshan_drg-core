@@ -42,6 +42,7 @@ class Driver
         '13' => '次要诊断不存在于MCC或CC数据中',
         '14' => '主要诊断未通过MCC或CC排除表校验',
         '15' => '不符合当前ADRG入组规则',
+        '16' => '未匹配到任意MDC分组'
     ];
 
     /**
@@ -102,7 +103,8 @@ class Driver
     {
         $chsDrgSet = $this->switch($drgSetCode);
         $result = $chsDrgSet->process($medicalRecord);
-        return $this->jcode(Util::getJState($result), Util::getJMsg($result), Util::getJData($result));
+        return $result;
+        // return $this->jcode(Util::getJState($result), Util::getJMsg($result), Util::getJData($result));
     }
     /**
      * 根据状态码获取JsonTable格式信息
