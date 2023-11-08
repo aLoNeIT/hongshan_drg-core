@@ -103,8 +103,18 @@ class Driver
     {
         $chsDrgSet = $this->switch($drgSetCode);
         $result = $chsDrgSet->process($medicalRecord);
-        return $result;
-        // return $this->jcode(Util::getJState($result), Util::getJMsg($result), Util::getJData($result));
+        switch (Util::getJState($result)) {
+            case 0: // 成功
+                return $result;
+            case 12: // adrg未匹配
+            case 16: // mdc未匹配
+                return $this->jcode(Util::getJState($result), Util::getJMsg($result), [
+                    'code' => Util::getJMsg($result)
+                ]);
+                break;
+            default:
+                return $this->jcode(Util::getJState($result), Util::getJMsg($result), Util::getJData($result));
+        }
     }
     /**
      * 根据状态码获取JsonTable格式信息

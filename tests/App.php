@@ -14,7 +14,6 @@ class App
 {
     public function run()
     {
-        $startTime = microtime(true);
         echo '读取drg数据', PHP_EOL;
         // 读取drg数据
         $file = dirname(__DIR__) . '/data.json';
@@ -34,6 +33,7 @@ class App
         $driver = (new HSDrg)->store();
         // 加载drg计算数据
         $driver->load($code, $name, $data);
+        $startTime = microtime(true);
         // 获取测试用例数据
         $dir = __DIR__ . '/';
         $cases = include $dir . 'Cases.php';
@@ -48,16 +48,30 @@ class App
                 // echo \json_encode($case['medical_record'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT), PHP_EOL;
                 $medicalRecord = (new MedicalRecord())->load($case['medical_record']);
                 $jResult = $driver->process($code, $medicalRecord);
-                $drgCode = Util::getJMsg($jResult);
-                // 先判断drgCode是否和预期一致
-                if ($drgCode == $case['drg_code']) {
-                    // 预期一致
-                    $success++;
-                    echo "drg分组一致，预期{$case['drg_code']}，实际{$drgCode}", PHP_EOL;
+                if (Util::isSuccess($jResult)) {
+                    // 获取成功，则对比下是否和预定的drg分组一致
+                    $drgCode = Util::getJMsg($jResult);
+                    if ($drgCode != $case['drg_code']) {
+                        $fail++;
+                        echo "drg分组不一致，预期{$case['drg_code']}，实际{$drgCode}", PHP_EOL;
+                    } else {
+                        $success++;
+                        echo "drg分组一致，预期{$case['drg_code']}，实际{$drgCode}", PHP_EOL;
+                    }
                 } else {
-                    // 预期不一致
+                    // 比对失败，需要判定是否12、16，因为测试用例可能故意给错误的信息
+                    if (\in_array(Util::getJState($jResult), [12, 16])) {
+                        $data = (array)Util::getJData($jResult);
+                        $drgCode = $data['code'];
+                        if ($drgCode == $case['drg_code']) {
+                            $success++;
+                            echo "drg分组一致，预期{$case['drg_code']}，实际{$drgCode}", PHP_EOL;
+                            continue;
+                        }
+                    }
                     $fail++;
-                    echo "drg分组不一致，预期{$case['drg_code']}，实际{$drgCode}", PHP_EOL;
+                    $msg = Util::getJMsg($jResult);
+                    echo "drg分组失败[{$msg}]，预期{$case['drg_code']}", PHP_EOL;
                 }
             }
         }

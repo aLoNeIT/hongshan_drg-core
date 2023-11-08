@@ -119,6 +119,6 @@ class AdjacentDiagnosisRelatedGroup extends Base implements IDRGProcessor
         return $result ? Util::jsuccess($this->code, [
             'code' => $this->code,
             'name' => $this->name
-        ]) : Util::jerror();
+        ]) : Util::jerror(15);
     }
 }
