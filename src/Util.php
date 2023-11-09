@@ -41,7 +41,7 @@ class Util
      */
     public static function getJData(array $jtable)
     {
-        return $jtable['data'];
+        return $jtable['data'] ?? null;
     }
 
     /**
