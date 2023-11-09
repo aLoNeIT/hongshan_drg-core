@@ -202,7 +202,7 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
                         $ccCode = '5';
                         break;
                     default: // 匹配失败
-                        return Util::jerror(14);
+                        return Util::jerror(14, $code);
                 }
             }
         }
@@ -212,7 +212,7 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
             // 重新生成末尾为9的编码
             $drgCode = "{$code}9";
             if (!isset($this->drgItems[$drgCode])) {
-                return Util::jerror(10);
+                return Util::jerror(10, $drgCode);
             }
         }
         // 成功生成有效的drg编码

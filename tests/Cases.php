@@ -147,5 +147,21 @@ return [
             'major_procedure' => '81.4900x005',
             'secondary_procedure' => []
         ]
+        // ], [
+        //     // 随机测试
+        //     'drg_code' => '0000',
+        //     'medical_record' => [
+        //         'code' => '010231003424',
+        //         'sex' => 1,
+        //         'age' => '39',
+        //         'in_department' => 2,
+        //         'out_type' => '1',
+        //         'principal_diagnosis' => 'I50.900x007',
+        //         'secondary_diagnosis' => [
+        //             'S01.800x011'
+        //         ],
+        //         'major_procedure' => '01.0900x006',
+        //         'secondary_procedure' => []
+        //     ]
     ]
 ];
