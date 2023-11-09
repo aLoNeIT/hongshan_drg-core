@@ -16,6 +16,14 @@ class SingleDiagnosis extends Base
     /** @inheritDoc */
     public function detect(MedicalRecord $medicalRecord, array $items): bool
     {
+        $procedure = [
+            ...($medicalRecord->majorProcedure ? [$medicalRecord->majorProcedure] : []),
+            ...$medicalRecord->secondaryProcedure
+        ];
+        if (!empty($procedure)) {
+            // 有手术，不入组
+            return false;
+        }
         // 主诊断和其他诊断合并成新数组
         $diagnosis = [
             ...($medicalRecord->principalDiagnosis ? [$medicalRecord->principalDiagnosis] : []),

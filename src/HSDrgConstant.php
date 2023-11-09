@@ -44,6 +44,7 @@ class HSDrgConstant
         9 => \hsdrg\processor\adrg\SinglePrincipalDiagnosisOrMajorProcedure::class,
         10 => \hsdrg\processor\adrg\SinglePrincipalDiagnosisAndTwoProcedure::class,
         11 => \hsdrg\processor\adrg\SinglePrincipalDiagnosisAndMajorProcedure::class,
+        12 => \hsdrg\processor\adrg\SinglePrincipalDiagnosisAndMultiProcedureSimple::class,
     ];
 
     /**

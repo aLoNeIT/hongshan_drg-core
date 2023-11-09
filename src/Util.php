@@ -241,9 +241,9 @@ class Util
         }
         // 解构参数
         list($key, $operator, $value) = $formula;
-        $key = self::snake($key);
+        $key = self::camel($key);
         // 判断属性是否存在
-        if (!isset($props[$key])) {
+        if (!isset($props[$key]) || \is_null($props[$key])) {
             return false;
         }
         // 进行公式计算(傻瓜方式)
@@ -294,7 +294,6 @@ class Util
      */
     public static function detectFormulaArray($props, array $formulas): bool
     {
-        $props = \is_object($props) ? self::getPublicProps($props) : $props;
         foreach ($formulas as $formula) {
             if (!self::detectFormula($props, $formula)) {
                 return false;

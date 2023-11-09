@@ -152,6 +152,8 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
     public function process(MedicalRecord $medicalRecord): array
     {
         $jResult = Util::jerror(2);
+        // 匹配到的qy组结果存入该数组
+        $qyResult = [];
         // 依次循环mdc，如果当前mdc的入组规则匹配，则返回当前mdc的adrg
         /** @var MajorDiagnosticCategory $mdc */
         foreach ($this->children as $mdc) {
@@ -159,6 +161,10 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
             $state = Util::getJState($jResult);
             // 只有未匹配到的时候才继续循环，其他情况都中断返回
             if (11 === $state) {
+                continue;
+            } elseif (12 === $state) {
+                // 如果进入QY组，不直接退出，而是继续匹配下去
+                $qyResult[] = $jResult;
                 continue;
             }
             break;
@@ -168,6 +174,10 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
             case 0: // 成功，不处理
                 break;
             case 11: // 全部mdc都无法入组
+                // 判断是否存在qy组数据，如果存在，则返回该数据
+                if (!empty($qyResult)) {
+                    return $qyResult[0];
+                }
                 return Util::jerror(16, '0000');
             default: // 其他错误
                 return $jResult;

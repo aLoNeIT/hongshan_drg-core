@@ -163,5 +163,56 @@ return [
         //         'major_procedure' => '01.0900x006',
         //         'secondary_procedure' => []
         //     ]
+    ], [
+        // 单主诊断
+        'drg_code' => 'PU15',
+        'medical_record' => [
+            'code' => '010231003428',
+            'sex' => 2,
+            'age' => 0,
+            'age_day' => 29,
+            'weight' => null,
+            'birth_weight' => null,
+            'in_department' => 2,
+            'out_type' => 1,
+            'principal_diagnosis' => 'A04.000x001',
+            'secondary_diagnosis' => [],
+            'major_procedure' => '',
+            'secondary_procedure' => []
+        ]
+    ], [
+        // 单主诊断或者单诊断时，带有手术则不入组
+        'drg_code' => 'BQY',
+        'medical_record' => [
+            'code' => '010231003433',
+            'sex' => 2,
+            'age' => '31',
+            'age_day' => null,
+            'weight' => null,
+            'birth_weight' => null,
+            'in_department' => 3,
+            'out_type' => '1',
+            'principal_diagnosis' => 'G91.000x002',
+            'secondary_diagnosis' => ['A01.200'],
+            'major_procedure' => '14.0101',
+            'secondary_procedure' => []
+        ]
+    ], [
+        // 单主诊断或者单诊断时，带有手术则不入组
+        'drg_code' => 'NA19',
+        'medical_record' => [
+            'code' => '010231003433',
+            'sex' => 2,
+            'age' => '31',
+            'age_day' => null,
+            'weight' => null,
+            'birth_weight' => null,
+            'in_department' => 3,
+            'out_type' => '1',
+            'principal_diagnosis' => 'C45.100',
+            'secondary_diagnosis' => ['A01.200'],
+            'major_procedure' => '67.4x00x002',
+            'secondary_procedure' => []
+        ]
     ]
 ];
