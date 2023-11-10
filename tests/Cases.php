@@ -201,7 +201,7 @@ return [
         // 单主诊断或者单诊断时，带有手术则不入组
         'drg_code' => 'NA19',
         'medical_record' => [
-            'code' => '010231003433',
+            'code' => '010231003424',
             'sex' => 2,
             'age' => '31',
             'age_day' => null,

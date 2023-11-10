@@ -10,12 +10,14 @@ use hsdrg\Util;
 
 error_reporting(E_ALL);
 
+defined('DEBUG') || define('DEBUG', false);
+
 class App
 {
     public function run()
     {
         try {
-            echo '读取drg数据', PHP_EOL;
+            $this->echoMsg('读取drg数据', true);
             // 读取drg数据
             $file = dirname(__DIR__) . '/data.json';
             $content = file_get_contents($file);
@@ -29,7 +31,7 @@ class App
                 'name' => $name,
                 'data' => $data
             ] = $json;
-            echo '创建DRG分组器', PHP_EOL;
+            $this->echoMsg('创建DRG分组器', true);
             // 创建实例
             $driver = (new HSDrg)->store();
             // 加载drg计算数据
@@ -41,7 +43,7 @@ class App
             $success = 0;
             $fail = 0;
             $num = 0;
-            for ($i = 0; $i < 1; $i++) {
+            for ($i = 0; $i < 500; $i++) {
                 foreach ($cases as $idx => $case) {
                     $num++;
                     // echo "读取第[{$num}]个测试用例", PHP_EOL;
@@ -54,10 +56,10 @@ class App
                         $drgCode = Util::getJMsg($jResult);
                         if ($drgCode != $case['drg_code']) {
                             $fail++;
-                            echo "drg分组不一致，预期{$case['drg_code']}，实际{$drgCode}", PHP_EOL;
+                            $this->echoMsg("drg分组不一致，预期{$case['drg_code']}，实际{$drgCode}");
                         } else {
                             $success++;
-                            echo "drg分组一致，预期{$case['drg_code']}，实际{$drgCode}", PHP_EOL;
+                            $this->echoMsg("drg分组一致，预期{$case['drg_code']}，实际{$drgCode}");
                         }
                     } else {
                         // 比对失败，需要判定是否12、16，因为测试用例可能故意给错误的信息
@@ -66,13 +68,13 @@ class App
                             $drgCode = $data['code'];
                             if ($drgCode == $case['drg_code']) {
                                 $success++;
-                                echo "drg分组一致，预期{$case['drg_code']}，实际{$drgCode}", PHP_EOL;
+                                $this->echoMsg("drg分组一致，预期{$case['drg_code']}，实际{$drgCode}");
                                 continue;
                             }
                         }
                         $fail++;
                         $msg = Util::getJMsg($jResult);
-                        echo "drg分组失败[{$msg}]，预期{$case['drg_code']}", PHP_EOL;
+                        $this->echoMsg("drg分组失败[{$msg}]，预期{$case['drg_code']}");
                     }
                 }
             }
@@ -86,10 +88,16 @@ class App
             } else {
                 $diffTime = round(($endTime - $startTime) * 1000, 3);
             }
-            echo "测试用例运行完毕，耗时 {$diffTime} {$diffTimeUnit}，共 {$num} 个用例，成功 {$success} 个，失败 {$fail} 个", PHP_EOL;
+            $this->echoMsg("测试用例运行完毕，耗时 {$diffTime} {$diffTimeUnit}，共 {$num} 个用例，成功 {$success} 个，失败 {$fail} 个", true);
         } catch (\Throwable $ex) {
             var_dump($ex);
         }
+    }
+
+    private function echoMsg(string $msg, bool $force = false): void
+    {
+        if (!$force && !DEBUG) return;
+        echo $msg, PHP_EOL;
     }
 }
 
