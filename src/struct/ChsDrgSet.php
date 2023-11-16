@@ -216,9 +216,21 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
         // 生成drg编码
         $drgCode = "{$code}{$ccCode}";
         if (!isset($this->drgItems[$drgCode])) {
-            // 重新生成末尾为9的编码
-            $drgCode = "{$code}9";
-            if (!isset($this->drgItems[$drgCode])) {
+            // 未查询到drg编码，则从5、9里面继续寻找
+            $arr = ['5', '9'];
+            $idx = array_search($ccCode, $arr);
+            $idx = false === $idx ? 0 : $idx;
+            $found = false;
+            for ($i = $idx; $i < 2; $i++) {
+                // 重新生成末尾为9的编码
+                $drgCode = "{$code}{$arr[$i]}";
+                if (isset($this->drgItems[$drgCode])) {
+                    // 查询到有效的，停止
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
                 return Util::jerror(10, $drgCode);
             }
         }

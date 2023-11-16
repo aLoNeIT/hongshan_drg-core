@@ -214,5 +214,21 @@ return [
             'major_procedure' => '67.4x00x002',
             'secondary_procedure' => []
         ]
+    ], [
+        // 单主诊断或者单诊断时，带有手术则不入组
+        'drg_code' => 'BR15',
+        'medical_record' => [
+            'code' => '0100009902',
+            'age' => 65,
+            'sex' => 1,
+            'out_type' => 2,
+            'in_days' => 1,
+            'birth_weight' => 0,
+            'weight' => 0,
+            'principal_diagnosis' => 'G91.000x002',
+            'secondary_diagnosis' => ['C50.000'],
+            'major_procedure' => '',
+            'secondary_procedure' => []
+        ]
     ]
 ];

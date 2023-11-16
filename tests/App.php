@@ -10,7 +10,7 @@ use hsdrg\Util;
 
 error_reporting(E_ALL);
 
-defined('DEBUG') || define('DEBUG', false);
+defined('DEBUG') || define('DEBUG', true);
 
 class App
 {
@@ -43,7 +43,7 @@ class App
             $success = 0;
             $fail = 0;
             $num = 0;
-            for ($i = 0; $i < 500; $i++) {
+            for ($i = 0; $i < 1; $i++) {
                 foreach ($cases as $idx => $case) {
                     $num++;
                     // echo "读取第[{$num}]个测试用例", PHP_EOL;
