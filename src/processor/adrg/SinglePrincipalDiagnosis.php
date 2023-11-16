@@ -26,12 +26,6 @@ class SinglePrincipalDiagnosis extends Base
         }
         // 获取当前adrg下的主诊断数据，单诊断模式下只有表0
         $diagnosis = $items['diagnosis'][0] ?? [];
-        // var_dump([
-        //     'diagnosis' => $diagnosis,
-        //     'class' => static::class,
-        //     'pd' => $medicalRecord->principalDiagnosis,
-        //     'found' => \in_array($medicalRecord->principalDiagnosis, $diagnosis),
-        // ]);
         return \in_array($medicalRecord->principalDiagnosis, $diagnosis);
     }
 }

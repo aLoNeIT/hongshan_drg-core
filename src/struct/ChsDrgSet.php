@@ -260,7 +260,6 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
         $diagnosis = null;
         $diagnosisData = null;
         foreach ($codes as $code) {
-            // var_dump(['cc_item' => $codes, 'count' => count($ccItems), 'cc_obj' => $ccItems]);
             /** @var MajorComplicationComorbidity $cc */
             $cc = $ccItems[$code];
             $excludeGroupCode =  $cc->excludeGroupCode;

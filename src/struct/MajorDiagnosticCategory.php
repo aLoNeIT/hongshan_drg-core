@@ -82,7 +82,6 @@ class MajorDiagnosticCategory extends Base implements IDRGProcessor, IChildColle
             return $this->processor;
         }
         $processMap = HSDrgConstant::MDC_PROCESSOR_MAP;
-        // var_dump([Util::getPublicProps($this), $processMap]);
         if (isset($processMap[$this->processorType])) {
             $this->processor = new $processMap[$this->processorType]();
         }
@@ -126,7 +125,5 @@ class MajorDiagnosticCategory extends Base implements IDRGProcessor, IChildColle
             'name' => $this->name,
             'adrg' => $adrgData
         ]);
-        // 因为数据问题，暂时只返回adrgCode
-        // return Util::jsuccess("{$adrgCode}");
     }
 }
