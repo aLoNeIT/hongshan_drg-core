@@ -206,6 +206,7 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
                 $state = Util::getJState($jResult);
                 switch ($state) {
                     case 13: // 不伴并发症或合并症
+                    case 14: // 主要诊断在排除表，不构成并发症
                         $ccCode = '5';
                         break;
                     default: // 匹配失败

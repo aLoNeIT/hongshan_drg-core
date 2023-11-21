@@ -230,5 +230,21 @@ return [
             'major_procedure' => '',
             'secondary_procedure' => []
         ]
+    ], [
+        // 主诊断在mcc排除表，不构成并发症
+        'drg_code' => 'IS29',
+        'medical_record' => [
+            'code' => '0100009833',
+            'age' => 14,
+            'sex' => 1,
+            'out_type' => 1,
+            'in_days' => null,
+            'birth_weight' => null,
+            'weight' => null,
+            'principal_diagnosis' => 'S82.202',
+            'secondary_diagnosis' => ['S82.400x001'],
+            'major_procedure' => null,
+            'secondary_procedure' => []
+        ]
     ]
 ];
