@@ -16,7 +16,7 @@
         }
     },
     "require": {
-        "php": ">=7.2"
+        "php": ">=8.0"
     },
     "scripts": {
         "test": "@php ./tests/App.php"

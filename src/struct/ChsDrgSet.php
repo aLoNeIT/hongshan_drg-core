@@ -226,6 +226,8 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
                 // 重新生成末尾为9的编码
                 $drgCode = "{$code}{$arr[$i]}";
                 if (isset($this->drgItems[$drgCode])) {
+                    // 非1、3没有cc数据，清理掉
+                    $ccData = null;
                     // 查询到有效的，停止
                     $found = true;
                     break;
