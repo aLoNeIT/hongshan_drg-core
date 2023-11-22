@@ -200,7 +200,7 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
             if (Util::isSuccess($jResult)) {
                 $ccCode = '3';
                 $ccData = \array_merge([
-                    'type' => 'mcc'
+                    'type' => 'cc'
                 ], Util::getJData($jResult));
             } else {
                 $state = Util::getJState($jResult);
