@@ -152,6 +152,11 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
     public function process(MedicalRecord $medicalRecord): array
     {
         $jResult = Util::jerror(2);
+        // 西安drg特殊处理，后期有更多地区后再按照驱动模式单独列出
+        if ($medicalRecord->inDays <= 1 || $medicalRecord->inDays > 60) {
+            // 住院天数极端值病例暂不纳入DRG付费，按项目付费。住院天数极端值病例是指住院天数小于等于1天或大于60天的病例
+            return Util::jerror(100);
+        }
         // 匹配到的qy组结果存入该数组
         $qyResult = [];
         // 依次循环mdc，如果当前mdc的入组规则匹配，则返回当前mdc的adrg

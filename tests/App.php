@@ -71,6 +71,10 @@ class App
                                 $this->echoMsg("drg分组一致，预期{$case['drg_code']}，实际{$drgCode}");
                                 continue;
                             }
+                        } else if (isset($case['state']) && Util::getJState($jResult) == $case['state']) {
+                            $success++;
+                            $this->echoMsg("drg分组一致，预期错误码 {$case['state']}，实际错误码 " . Util::getJState($jResult));
+                            continue;
                         }
                         $fail++;
                         $msg = Util::getJMsg($jResult);
