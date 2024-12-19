@@ -7,11 +7,15 @@ namespace hsdrg\processor\adrg;
 use hsdrg\struct\MedicalRecord;
 
 /**
- * 单主诊断+手术1+手术2
+ * 复杂处理器B
+ * 
+ * - 主要诊断+手术或操作1+手术或操作2
+ * - 主要诊断+手术或操作1+手术或操作3+手术或操作4
+ * - 主要诊断+手术或操作4+手术或操作5
  * 
  * @author 王阮强 <wangruanqiang@hongshanhis.com>
  */
-class SinglePrincipalDiagnosisAndTwoProcedure extends Base
+class ComplexB extends Base
 {
     /** @inheritDoc */
     public function detect(MedicalRecord $medicalRecord, array $items): bool
@@ -20,19 +24,13 @@ class SinglePrincipalDiagnosisAndTwoProcedure extends Base
         if (!\in_array($medicalRecord->principalDiagnosis, $items['diagnosis'][0] ?? [])) {
             return false;
         }
-        // 主手术和其他手术合并为数组
         $procedures = [
             ...($medicalRecord->majorProcedure ? [$medicalRecord->majorProcedure] : []),
             ...$medicalRecord->secondaryProcedure
         ];
-        $match = true;
-        // 手术表1+手术表2匹配
-        foreach ([0, 1] as $idx) {
-            if (!$this->detectProcedure($procedures, $items['procedure'][$idx] ?? [])) {
-                $match = false;
-                break;
-            }
-        }
-        return $match;
+        // 三个其中一个匹配成功即匹配成功
+        return $this->detectMultiProcedure($procedures, $items, [0, 1])
+            || $this->detectMultiProcedure($procedures, $items, [0, 2, 3])
+            || $this->detectMultiProcedure($procedures, $items, [0, 3, 4]);
     }
 }

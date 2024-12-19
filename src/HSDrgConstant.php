@@ -31,6 +31,8 @@ class HSDrgConstant
      * - 8：无手术
      * - 9：主要诊断或主要手术操作
      * - 10：单主诊断和双手术
+     * - 11：单主诊断和单主手术
+     * - 12：单主诊断+多手术简易版
      */
     public const ADRG_PROCESSOR_MAP = [
         1 => \hsdrg\processor\adrg\SinglePrincipalDiagnosis::class,
@@ -45,6 +47,10 @@ class HSDrgConstant
         10 => \hsdrg\processor\adrg\SinglePrincipalDiagnosisAndTwoProcedure::class,
         11 => \hsdrg\processor\adrg\SinglePrincipalDiagnosisAndMajorProcedure::class,
         12 => \hsdrg\processor\adrg\SinglePrincipalDiagnosisAndMultiProcedureSimple::class,
+        100 => \hsdrg\processor\adrg\ComplexA::class,
+        101 => \hsdrg\processor\adrg\ComplexB::class,
+        102 => \hsdrg\processor\adrg\ComplexC::class,
+        103 => \hsdrg\processor\adrg\ComplexD::class
     ];
 
     /**

@@ -27,4 +27,55 @@ use hsdrg\processor\Base as BaseProcessor;
  */
 abstract class Base extends BaseProcessor
 {
+    protected function detectDiagnosis(array &$diagnosises, array $item): bool
+    {
+        // 计算交集
+        $intersect = array_intersect($diagnosises, $item);
+        // 无交集则不匹配，直接退出
+        if (empty($intersect)) {
+            return false;
+        }
+        // 计算差集，进行下一次计算
+        $diagnosises = \array_diff($diagnosises, $intersect);
+        return true;
+    }
+
+    /**
+     * 匹配手术
+     *
+     * @param array $procedures 患者手术列表
+     * @param array $item 当前ADRG需要匹配的手术列表
+     * @return boolean 返回匹配结果
+     */
+    protected function detectProcedure(array &$procedures, array $item): bool
+    {
+        // 计算交集
+        $intersect = array_intersect($procedures, $item);
+        // 无交集则不匹配，直接退出
+        if (empty($intersect)) {
+            return false;
+        }
+        // 计算差集，进行下一次计算
+        $procedures = \array_diff($procedures, $intersect);
+        return true;
+    }
+    /**
+     * 匹配多手术
+     *
+     * @param array $procedures 患者手术列表
+     * @param array $items 入组依据数据
+     * @param array $index 手术索引
+     * @return boolean 返回匹配结果
+     */
+    protected function detectMultiProcedure(array $procedures, array $items, array $index): bool
+    {
+        $match = true;
+        foreach ($index as $idx) {
+            if ($this->detectProcedure($procedures, $items['procedure'][$idx] ?? [])) {
+                $match = false;
+                break;
+            }
+        }
+        return $match;
+    }
 }
