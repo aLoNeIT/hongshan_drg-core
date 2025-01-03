@@ -21,6 +21,10 @@ class SinglePrincipalDiagnosisAndMultiProcedure extends SinglePrincipalDiagnosis
         if (false === $match) {
             $match = true;
             // 继续匹配手术表1+手术表3+手术表4
+            $procedures = [
+                ...($medicalRecord->majorProcedure ? [$medicalRecord->majorProcedure] : []),
+                ...$medicalRecord->secondaryProcedure
+            ];
             foreach ([0, 2, 3] as $idx) {
                 if (!$this->detectProcedure($procedures, $items['procedure'][$idx] ?? [])) {
                     $match = false;

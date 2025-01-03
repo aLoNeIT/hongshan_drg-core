@@ -26,18 +26,20 @@ class SinglePrincipalDiagnosisAndMultiProcedureSimple extends SinglePrincipalDia
             ...$medicalRecord->secondaryProcedure
         ];
         $match = true;
+        $p = $procedures;
         // 手术表1匹配
         foreach ([0] as $idx) {
-            if (!$this->detectProcedure($procedures, $items['procedure'][$idx] ?? [])) {
+            if (!$this->detectProcedure($p, $items['procedure'][$idx] ?? [])) {
                 $match = false;
                 break;
             }
         }
         if (false === $match) {
             $match = true;
+            $p = $procedures;
             // 继续匹配手术表2+手术表3
             foreach ([1, 2] as $idx) {
-                if (!$this->detectProcedure($procedures, $items['procedure'][$idx] ?? [])) {
+                if (!$this->detectProcedure($p, $items['procedure'][$idx] ?? [])) {
                     $match = false;
                     break;
                 }

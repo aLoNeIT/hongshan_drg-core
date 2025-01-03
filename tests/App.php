@@ -22,8 +22,8 @@ class App
             $file = dirname(__DIR__) . '/data.json';
             $content = file_get_contents($file);
             $json = [
-                'code' => '1',
-                'name' => 'CHS-DRG 1.1 版 （医保编码 2.0)',
+                'code' => '2',
+                'name' => '按病组（DRG）付费 分组方案（2.0 版）编制说明',
                 'data' => \json_decode($content, true)
             ];
             [
@@ -39,7 +39,7 @@ class App
             $startTime = microtime(true);
             // 获取测试用例数据
             $dir = __DIR__ . '/';
-            $cases = include $dir . 'Cases.php';
+            $cases = include $dir . 'Cases2.php';
             $success = 0;
             $fail = 0;
             $num = 0;
