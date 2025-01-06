@@ -64,4 +64,34 @@ return [
             'secondary_procedure' => []
         ]
     ],
+    [
+        // 单诊断带严重并发症  期望入组  
+        'drg_code' => 'NA19',
+        'medical_record' => [
+            'code' => '0100000509',
+            'sex' => 2,
+            'age' => 99,
+            'in_days' => 2,
+            'out_type' => '',
+            'principal_diagnosis' => 'C46.700x001',
+            'secondary_diagnosis' => ['C51.000'],
+            'major_procedure' => '68.6100x001',
+            'secondary_procedure' => []
+        ]
+    ],
+    [
+        // 单诊断带严重并发症  期望入组  
+        'drg_code' => 'WB19',
+        'medical_record' => [
+            'code' => '0100000509',
+            'sex' => 2,
+            'age' => 99,
+            'in_days' => 2,
+            'out_type' => '',
+            'principal_diagnosis' => 'T35.700x009',
+            'secondary_diagnosis' => ['T31.200'],
+            'major_procedure' => '04.0408',
+            'secondary_procedure' => []
+        ]
+    ]
 ];

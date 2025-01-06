@@ -17,12 +17,13 @@ class App
     public function run()
     {
         try {
+            $code = '2';
             $this->echoMsg('读取drg数据', true);
             // 读取drg数据
-            $file = dirname(__DIR__) . '/data.json';
+            $file = dirname(__DIR__) . "/data-{$code}.json";
             $content = file_get_contents($file);
             $json = [
-                'code' => '2',
+                'code' => $code,
                 'name' => '按病组（DRG）付费 分组方案（2.0 版）编制说明',
                 'data' => \json_decode($content, true)
             ];
