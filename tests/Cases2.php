@@ -50,4 +50,18 @@ return [
             'secondary_procedure' => []
         ]
     ],
+    [
+        // 单诊断带严重并发症
+        'drg_code' => 'GE19',
+        'medical_record' => [
+            'code' => '0100000509',
+            'sex' => 1,
+            'age' => 99,
+            'in_days' => 2,
+            'principal_diagnosis' => 'C18.100',
+            'secondary_diagnosis' => [],
+            'major_procedure' => '47.0100',
+            'secondary_procedure' => []
+        ]
+    ],
 ];
