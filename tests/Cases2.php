@@ -96,7 +96,7 @@ return [
     ],
     [
         // 单诊断带严重并发症  期望入组  
-        'drg_code' => 'JA19',
+        'drg_code' => 'JB39',
         'medical_record' => [
             'code' => '0100000643',
             'sex' => 2,
@@ -111,7 +111,7 @@ return [
     ],
     [
         // 单诊断带严重并发症  期望入组  
-        'drg_code' => 'JA19',
+        'drg_code' => 'JB19',
         'medical_record' => [
             'code' => '0100000644',
             'sex' => 2,
