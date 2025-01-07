@@ -124,4 +124,19 @@ return [
             'secondary_procedure' => []
         ]
     ],
+    [
+        // 单诊断带严重并发症  期望入组  
+        'drg_code' => 'FK29',
+        'medical_record' => [
+            'code' => '0310039724',
+            'sex' => 2,
+            'age' => 69,
+            'in_days' => 2,
+            'out_type' => 1,
+            'principal_diagnosis' => 'I11.001',
+            'secondary_diagnosis' => ['E11.900', 'I25.103', 'Z95.501', 'I50.900x007', 'I10.x04',],
+            'major_procedure' => '00.5000x001',
+            'secondary_procedure' => []
+        ]
+    ],
 ];
