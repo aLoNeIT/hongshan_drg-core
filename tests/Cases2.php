@@ -93,5 +93,35 @@ return [
             'major_procedure' => '04.0408',
             'secondary_procedure' => []
         ]
-    ]
+    ],
+    [
+        // 单诊断带严重并发症  期望入组  
+        'drg_code' => 'JA19',
+        'medical_record' => [
+            'code' => '0100000643',
+            'sex' => 2,
+            'age' => 67,
+            'in_days' => 2,
+            'out_type' => '',
+            'principal_diagnosis' => 'C50.000',
+            'secondary_diagnosis' => ['C44.501'],
+            'major_procedure' => '85.2100x003',
+            'secondary_procedure' => []
+        ]
+    ],
+    [
+        // 单诊断带严重并发症  期望入组  
+        'drg_code' => 'JA19',
+        'medical_record' => [
+            'code' => '0100000644',
+            'sex' => 2,
+            'age' => 67,
+            'in_days' => 2,
+            'out_type' => '',
+            'principal_diagnosis' => 'C44.501',
+            'secondary_diagnosis' => [],
+            'major_procedure' => '85.5300x001',
+            'secondary_procedure' => []
+        ]
+    ],
 ];

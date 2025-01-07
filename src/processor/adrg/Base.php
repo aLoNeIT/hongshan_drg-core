@@ -71,7 +71,7 @@ abstract class Base extends BaseProcessor
     {
         $match = true;
         foreach ($index as $idx) {
-            if ($this->detectProcedure($procedures, $items['procedure'][$idx] ?? [])) {
+            if (!$this->detectProcedure($procedures, $items['procedure'][$idx] ?? [])) {
                 $match = false;
                 break;
             }
