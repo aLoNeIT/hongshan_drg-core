@@ -70,7 +70,7 @@ class ComplexA extends Base
         ];
         $match = true;
         foreach ([2, 3] as $idx) {
-            if ($this->detectProcedure($procedures, $items['procedure'][$idx] ?? [])) {
+            if (!$this->detectProcedure($procedures, $items['procedure'][$idx] ?? [])) {
                 $match = false;
                 break;
             }

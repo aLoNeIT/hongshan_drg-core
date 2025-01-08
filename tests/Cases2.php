@@ -139,4 +139,19 @@ return [
             'secondary_procedure' => []
         ]
     ],
+    [
+        // 单诊断带严重并发症  期望入组  
+        'drg_code' => 'IU15',
+        'medical_record' => [
+            'code' => '13660003863',
+            'sex' => 2,
+            'age' => 61,
+            'in_days' => 2,
+            'out_type' => 1,
+            'principal_diagnosis' => 'M17.000',
+            'secondary_diagnosis' => ['B02.202+G53.0*', 'B02.202+G53.0*', 'B02.202+G53.0*'],
+            'major_procedure' => null,
+            'secondary_procedure' => []
+        ]
+    ],
 ];
