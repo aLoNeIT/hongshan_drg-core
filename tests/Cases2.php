@@ -154,4 +154,93 @@ return [
             'secondary_procedure' => []
         ]
     ],
+    [
+        // 单诊断带严重并发症  期望入组--BB29 ; 实际入组--BE19
+        'drg_code' => 'BB25',
+        'medical_record' => [
+            'code' => '0100000509',
+            'sex' => 2,
+            'age' => 99,
+            'in_days' => 2,
+            'out_type' => '',
+            'principal_diagnosis' => 'I60.000',
+            'secondary_diagnosis' => [],
+            'major_procedure' => '39.5900x013',
+            'secondary_procedure' => []
+        ]
+    ],
+    [
+        // 单诊断带严重并发症  期望入组--BB29 ; 实际入组--BC19
+        'drg_code' => 'BB25',
+        'medical_record' => [
+            'code' => '0100000509',
+            'sex' => 2,
+            'age' => 99,
+            'in_days' => 2,
+            'out_type' => '',
+            'principal_diagnosis' => 'I60.000',
+            'secondary_diagnosis' => [],
+            'major_procedure' => '39.5101',
+            'secondary_procedure' => []
+        ]
+    ],
+    [
+        'drg_code' => 'BB25',
+        'medical_record' => [
+            'code' => '0100000509',
+            'sex' => 2,
+            'age' => 99,
+            'in_days' => 2,
+            'out_type' => '',
+            'principal_diagnosis' => 'I60.000',
+            'secondary_diagnosis' => [],
+            'major_procedure' => '01.2401',
+            'secondary_procedure' => []
+        ]
+    ],
+    [
+        'drg_code' => 'BB25',
+        'medical_record' => [
+            'code' => '0100000509',
+            'sex' => 1,
+            'age' => 38,
+            'in_days' => 2,
+            'out_type' => '',
+            'principal_diagnosis' => 'I60.000',
+            'secondary_diagnosis' => [],
+            'major_procedure' => '39.5900x013',
+            'secondary_procedure' => []
+        ]
+    ],
+    [
+        'drg_code' => 'BB25',
+        'medical_record' => [
+            'code' => '0100000863',
+            'sex' => 1,
+            'age' => 0,
+            'in_days' => 2,
+            'out_type' => '',
+            "birth_weight" => '',
+            "weight" => '',
+            'principal_diagnosis' => 'I60.000',
+            'secondary_diagnosis' => [],
+            'major_procedure' => '39.5900x013',
+            'secondary_procedure' => []
+        ]
+    ],
+    [
+        // 单诊断带严重并发症  期望入组--ZZ15 ; 实际入组--LR15
+        'drg_code' => 'ZZ11',
+        'medical_record' => [
+            'code' => '0100000509',
+            'sex' => 1,
+            'age' => 99,
+            'in_days' => 2,
+            'out_type' => '',
+            'principal_diagnosis' => 'T79.500x002',
+            'secondary_diagnosis' => ['S14.300'],
+            'major_procedure' => '',
+            'secondary_procedure' => []
+        ]
+    ]
 ];
