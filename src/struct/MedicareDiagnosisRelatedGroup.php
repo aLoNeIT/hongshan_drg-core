@@ -36,4 +36,10 @@ class MedicareDiagnosisRelatedGroup extends Base
      * @var integer|null
      */
     public $weight = null;
+    /**
+     * 病组类型
+     *
+     * @var integer|null
+     */
+    public $type = null;
 }
