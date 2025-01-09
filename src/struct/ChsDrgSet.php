@@ -248,6 +248,7 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
                 'code' => $drgCode,
                 'name' => $this->drgItems[$drgCode]->name,
                 'weight' => $this->drgItems[$drgCode]->weight,
+                'type' => $this->drgItems[$drgCode]->type,
             ],
             'mdc' => [
                 'code' => $data['code'],
