@@ -191,64 +191,49 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
         $code = Util::getJMsg($jResult);
         $data = Util::getJData($jResult);
         $ccCode = null;
+        $drgItem = null;
         $ccData = null;
+        // 依次匹配mcc、cc，若mcc生成的drg编码不存在，则还需要匹配cc
         // 匹配mcc
-        $jResult = $this->detectCC($medicalRecord, $this->mccItems, $this->mccCodeItems);
+        $jResult = $this->detectCC($code, $medicalRecord);
         if (Util::isSuccess($jResult)) {
             $ccCode = '1';
+            // $drgItem = Util::getJMsg($jResult);
             $ccData = \array_merge([
                 'type' => 'mcc'
             ], Util::getJData($jResult));
         } else {
             // 匹配cc
-            $jResult = $this->detectCC($medicalRecord, $this->ccItems, $this->ccCodeItems);
+            $jResult = $this->detectCC($code, $medicalRecord, false);
             if (Util::isSuccess($jResult)) {
                 $ccCode = '3';
+                // $drgItem = Util::getJMsg($jResult);
                 $ccData = \array_merge([
                     'type' => 'cc'
                 ], Util::getJData($jResult));
-            } else {
-                $state = Util::getJState($jResult);
-                switch ($state) {
-                    case 13: // 不伴并发症或合并症
-                    case 14: // 主要诊断在排除表，不构成并发症
-                        $ccCode = '5';
-                        break;
-                    default: // 匹配失败
-                        return Util::jerror(14, $code);
-                }
             }
         }
-        // 生成drg编码
-        $drgCode = "{$code}{$ccCode}";
-        if (!isset($this->drgItems[$drgCode])) {
-            // 未查询到drg编码，则从5、9里面继续寻找
-            $arr = ['5', '9'];
-            $idx = array_search($ccCode, $arr);
-            $idx = false === $idx ? 0 : $idx;
-            $found = false;
-            for ($i = $idx; $i < 2; $i++) {
-                // 重新生成末尾为9的编码
-                $drgCode = "{$code}{$arr[$i]}";
-                if (isset($this->drgItems[$drgCode])) {
-                    // 非1、3没有cc数据，清理掉
-                    $ccData = null;
-                    // 查询到有效的，停止
-                    $found = true;
-                    break;
-                }
+        // 根据确定起始的最后一位编码，决定从哪个下标起始
+        $arr = ['1', '3', '5', '9'];
+        $idx = \is_null($ccCode) ? 2 : \array_search($ccCode, $arr);
+        for ($i = $idx; $i < count($arr); $i++) {
+            $result = $this->detectDrgCode($code, $arr[$i]);
+            if (!\is_null($result)) {
+                $drgItem = $result;
+                break;
             }
-            if (!$found) {
-                return Util::jerror(10, $drgCode);
-            }
+        }
+        // 没有找到合适的drg分组编码，返回错误信息
+        if (\is_null($drgItem)) {
+            return Util::jerror(10, $code);
         }
         // 成功生成有效的drg编码
-        return Util::jsuccess($drgCode, [
+        return Util::jsuccess($drgItem->code, [
             'drg' => [
-                'code' => $drgCode,
-                'name' => $this->drgItems[$drgCode]->name,
-                'weight' => $this->drgItems[$drgCode]->weight,
-                'type' => $this->drgItems[$drgCode]->type,
+                'code' => $drgItem->code,
+                'name' => $drgItem->name,
+                'weight' => $drgItem->weight,
+                'type' => $drgItem->type,
             ],
             'mdc' => [
                 'code' => $data['code'],
@@ -262,15 +247,35 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
         ]);
     }
     /**
+     * 检测drg编码是否存在
+     *
+     * @param string $code mdc和adrg编码
+     * @param string $ccCode 并发症编码，1、3、5、9
+     * @return MedicareDiagnosisRelatedGroup|null 返回有效的drg对象，不存在则返回null
+     */
+    protected function detectDrgCode(string $code, string $ccCode): ?MedicareDiagnosisRelatedGroup
+    {
+        $drgCode = "{$code}{$ccCode}";
+        return $this->drgItems[$drgCode] ?? null;
+    }
+    /**
      * 检测严重并发症或合并症
      *
      * @param MedicalRecord $medicalRecord 病案信息
-     * @param array $ccItems 并发症或合并症数据集合
-     * @param array $ccCodeItems 并发症或合并症编码集合
-     * @return array 返回一个JsonTable格式的数组，成功msg节点是匹配到的次要诊断编码
+     * @param string $drgCode 匹配到的drg编码前三位
+     * @param boolean $mccItemd 是否匹配mcc
+     * @return array 返回一个JsonTable格式的数组，成功msg节点有效的drg编码，data是诊断数据
      */
-    protected function detectCC(MedicalRecord $medicalRecord, array $ccItems, array $ccCodeItems): array
+    protected function detectCC(string $drgCode, MedicalRecord $medicalRecord, bool $mccItemed = true): array
     {
+        // 根据mccItemed参数判断是匹配mcc还是cc
+        if ($mccItemed) {
+            $ccItems = $this->mccItems;
+            $ccCodeItems = $this->mccCodeItems;
+        } else {
+            $ccItems = $this->ccItems;
+            $ccCodeItems = $this->ccCodeItems;
+        }
         // 获取交集
         $codes = \array_intersect($medicalRecord->secondaryDiagnosis, $ccCodeItems);
         // 交集为空，说明次要诊断中不存在匹配的并发症或合并症，无需后续操作
@@ -296,6 +301,8 @@ class ChsDrgSet extends Base implements IChildCollection, IDRGProcessor
             }
         }
         // 校验完毕，diagnosis为null，说明主诊断在排除表内，不符合要求
-        return \is_null($diagnosis) ? Util::jerror(14) : Util::jsuccess($diagnosis, $diagnosisData);
+        return \is_null($diagnosis)
+            ? Util::jerror(14)
+            : Util::jsuccess($diagnosis, $diagnosisData);
     }
 }

@@ -27,9 +27,9 @@ class Util
      * 获取JsonTable格式数组中的msg值
      *
      * @param array $jtable JsonTable格式的数组
-     * @return string 返回msg值
+     * @return mixed 返回msg值
      */
-    public static function getJMsg(array $jtable): string
+    public static function getJMsg(array $jtable)
     {
         return $jtable['msg'];
     }
@@ -37,7 +37,7 @@ class Util
      * 获取JsonTable格式数组中的data值
      *
      * @param array $jtable JsonTable格式的数组
-     * @return mix 返回data值
+     * @return mixed 返回data值
      */
     public static function getJData(array $jtable)
     {
@@ -58,8 +58,8 @@ class Util
      * 获取一个JsonTable格式的数组
      *
      * @param integer $state 状态码
-     * @param mix $msg 简要消息
-     * @param mix|null $data 扩展数据
+     * @param mixed $msg 简要消息
+     * @param mixed|null $data 扩展数据
      * @return array 返回一个JsonTable格式的数组
      */
     public static function jecho(int $state, $msg, $data = null): array
@@ -75,8 +75,8 @@ class Util
     /**
      * 获取一个成功的JsonTable格式的数组
      *
-     * @param mix $msg 简要消息
-     * @param mix|null $data 扩展数据
+     * @param mixed $msg 简要消息
+     * @param mixed|null $data 扩展数据
      * @return array 返回一个JsonTable格式的数组
      */
     public static function jsuccess($msg = 'success', $data = null): array
@@ -87,8 +87,8 @@ class Util
      * 获取一个失败的JsonTable格式的数组
      *
      * @param integer $state 状态码
-     * @param mix $msg 简要消息
-     * @param mix|null $data 扩展数据
+     * @param mixed $msg 简要消息
+     * @param mixed|null $data 扩展数据
      * @return array 返回一个JsonTable格式的数组
      */
     public static function jerror(int $state = 1, $msg = 'failed', $data = null): array
@@ -98,8 +98,8 @@ class Util
     /**
      * 获取一个异常的JsonTable格式的数组
      *
-     * @param mix $msg 简要消息
-     * @param mix|null $data 扩展数据
+     * @param mixed $msg 简要消息
+     * @param mixed|null $data 扩展数据
      * @param integer $state 错误码
      * @return array 返回一个JsonTable格式的数组
      */
@@ -110,8 +110,8 @@ class Util
     /**
      * 获取一个成功的且带有data节点的JsonTable格式的数组
      *
-     * @param mix|null $data 扩展数据
-     * @param mix $msg 简要消息
+     * @param mixed|null $data 扩展数据
+     * @param mixed $msg 简要消息
      * @return array 返回一个JsonTable格式的数组
      */
     public static function jdata($data, $msg = 'success'): array

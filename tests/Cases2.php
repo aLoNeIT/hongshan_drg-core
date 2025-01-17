@@ -220,8 +220,8 @@ return [
             'age' => 0,
             'in_days' => 2,
             'out_type' => '',
-            "birth_weight" => '',
-            "weight" => '',
+            'birth_weight' => '',
+            'weight' => '',
             'principal_diagnosis' => 'I60.000',
             'secondary_diagnosis' => [],
             'major_procedure' => '39.5900x013',
@@ -241,5 +241,19 @@ return [
             'major_procedure' => '',
             'secondary_procedure' => []
         ]
-    ]
+    ],
+    [
+        'drg_code' => 'ET23',
+        'medical_record' => [
+            'code' => '1450004577',
+            'sex' => 2,
+            'age' => 61,
+            'in_days' => 7,
+            'out_type' => 1,
+            'principal_diagnosis' => 'J42.x00x004',
+            'secondary_diagnosis' => ['I25.901', 'I50.900x007', 'I10.x04'],
+            'major_procedure' => '',
+            'secondary_procedure' => []
+        ]
+    ],
 ];
